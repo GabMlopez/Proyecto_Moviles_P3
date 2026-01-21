@@ -4,7 +4,6 @@ import '../organism/balance_card.dart';
 import '../organism/trend_card.dart';
 import '../organism/spending_card.dart';
 import '../organism/last_movements_card.dart';
-import '../organism/bottom_nav.dart';
 
 class ResumenLayout extends StatefulWidget {
   const ResumenLayout({super.key});
@@ -14,7 +13,6 @@ class ResumenLayout extends StatefulWidget {
 }
 
 class _ResumenLayoutState extends State<ResumenLayout> {
-  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +35,6 @@ class _ResumenLayoutState extends State<ResumenLayout> {
             SliverToBoxAdapter(child: SizedBox(height: 18)),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNav(
-        currentIndex: _currentIndex,
-        onChanged: (i) => setState(() => _currentIndex = i),
       ),
     );
   }

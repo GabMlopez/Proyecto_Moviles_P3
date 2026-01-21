@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomNav extends StatelessWidget {
-  final int currentIndex;
-  final ValueChanged<int> onChanged;
+  final StatefulNavigationShell navigationShell;
 
   const BottomNav({
     super.key,
-    required this.currentIndex,
-    required this.onChanged,
+    required this.navigationShell,
   });
+
+  void _goBranch(int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = navigationShell.currentIndex;
+
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: onChanged,
+      onTap: _goBranch,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: const Color(0xFF2E6BFF),
       unselectedItemColor: const Color(0xFF9AA3B2),
@@ -31,6 +39,10 @@ class BottomNav extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.auto_awesome_rounded),
           label: 'IA Insights',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.temple_buddhist_sharp),
+          label: 'test',
         ),
       ],
     );

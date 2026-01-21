@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'presentation/layout/resumen_layout.dart';
+import './libraries/dio_controller.dart';
+import './libraries/route_controller.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await setupDependencies();
+
   runApp(const MainApp());
 }
 
@@ -10,8 +15,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ResumenLayout(),
+    return MaterialApp.router(
+      title: 'Tu App',
+      debugShowCheckedModeBanner: false,
+      routerConfig: appRouter,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+      ),
     );
   }
 }
