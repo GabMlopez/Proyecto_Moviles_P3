@@ -4,7 +4,16 @@ import '../atom/chip_month.dart';
 import '../atom/mini_stat.dart';
 
 class BalanceCard extends StatelessWidget {
-  const BalanceCard({super.key});
+  final double ingresosTotales;
+  final double gastosTotales;
+  BalanceCard({super.key, required this.ingresosTotales, required this.gastosTotales});
+
+
+  double calcularBalance()
+  {
+    return ingresosTotales - gastosTotales;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +23,7 @@ class BalanceCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Balance actual',
                   style: TextStyle(
@@ -26,22 +35,22 @@ class BalanceCard extends StatelessWidget {
               ChipMonth(label: 'January 2026', onTap: () {}),
             ],
           ),
-          const SizedBox(height: 10),
-          const Text(
-            '\$0.00',
+          SizedBox(height: 10),
+          Text(
+            '${calcularBalance().toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w900,
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 14),
-          const Row(
+          SizedBox(height: 14),
+          Row(
             children: [
               Expanded(
                 child: MiniStat(
                   title: 'INGRESOS',
-                  value: '\$0.00',
+                  value: "${ingresosTotales.toStringAsFixed(2)}",
                   valueColor: Color(0xFF14A44D),
                 ),
               ),
@@ -49,7 +58,7 @@ class BalanceCard extends StatelessWidget {
               Expanded(
                 child: MiniStat(
                   title: 'GASTOS',
-                  value: '\$0.00',
+                  value: "${gastosTotales.toStringAsPrecision(2)}",
                   valueColor: Color(0xFFE74C3C),
                 ),
               ),

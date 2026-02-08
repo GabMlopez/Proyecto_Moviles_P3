@@ -144,7 +144,13 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
             }
             if(snapshot.hasData) {
               ingresos = snapshot.data!;
-              return IngresosDataTable(ingresos);
+              return Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                margin: EdgeInsets.all(10),
+                child: IngresosDataTable(ingresos),
+              );
             }
             else{
               return Center(child: Text('Aún no ha registrado ningún ingreso'));
