@@ -167,7 +167,7 @@ class _AddIngresoLayoutState extends State<AddIngresoLayout> {
                         DropdownMenuItem(value: "Tarjeta de crédito", child: Text("Tarjeta de crédito")),
                         DropdownMenuItem(value: "Tarjeta de débito", child: Text("Tarjeta de débito")),
                         DropdownMenuItem(value: "Cheque", child: Text("Cheque")),
-                        DropdownMenuItem(value: "Transferencia", child: Text("Transferencia")),
+                        DropdownMenuItem(value: "Transferencia Bancaria", child: Text("Transferencia")),
                         DropdownMenuItem(value: "Otro", child: Text("Otro")),
                       ],
                       value: _medioDePagoController.text,

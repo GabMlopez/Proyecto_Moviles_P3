@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4c43a1c-66c8-428d-9ddf-d6e4adc7d04f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/add_ingreso_layout.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/editar_ingreso_layout.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/movimientos_layout.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/molecule/mensaje_snackbar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/dio_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/dio_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/add_ingreso_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/add_ingreso_layout.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/editar_ingreso_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/editar_ingreso_layout.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
