@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_u3/presentation/layout/test_layout.dart';
 import 'package:proyecto_u3/presentation/organism/bottom_nav.dart';
-
+import '../presentation/layout/login.dart';
 import '../presentation/layout/resumen_layout.dart';//
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -55,7 +55,7 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: '/tests2',
               name: 'tests2',
-              builder: (context, state) => const TestLayout(),
+              builder: (context, state) => const SimpleLoginScreen(),
             ),
           ],
         ),

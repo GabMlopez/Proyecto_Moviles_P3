@@ -12,7 +12,7 @@ class AuthService {
 
   AuthService(this.authRemoteDataSource);
 
-  Future<void> signInWithGoogle() async {
+  Future<void> signInWithGoogle(String contrasenia) async {
     try {
       // 1. Iniciar el flujo de Google
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -24,7 +24,7 @@ class AuthService {
       final String? idToken = googleAuth.idToken;
 
       if (idToken != null) {
-        final response = await authRemoteDataSource.loginWithGoogle(idToken);
+        final response = await authRemoteDataSource.loginWithGoogle(idToken,contrasenia);
 
         print("Servidor respondió con éxito: ${response}");
         // Aquí guardarías el token de TU servidor (JWT) usando Flutter Secure Storage

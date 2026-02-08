@@ -14,10 +14,10 @@ class SimpleLoginScreen extends StatefulWidget {
 }
 
 class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
-  // 1. Instancia configurada (v6.x usa este constructor)
   late final GoogleSignIn _googleSignIn;
   GoogleSignInAccount? _user;
-  String _contactInfo = "Sin datos";
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -34,81 +34,74 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
       ],
     );
 
-    // Escuchar cambios de usuario (equivalente a los eventos en v7)
+    // Escuchar cambios de usuario
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
       setState(() {
         _user = account;
       });
-      if (account != null) {
-        _fetchContacts();
-      }
     });
 
     // Intento de login silencioso al abrir la app
     _googleSignIn.signInSilently();
   }
 
+  Future<String?> _showPasswordDialog() async {
+    String? password;
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text("Crea una contraseña"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text("Para completar tu registro, asigna una contraseña a tu cuenta."),
+            TextField(
+              obscureText: true,
+              decoration: const InputDecoration(labelText: "Contraseña"),
+              onChanged: (value) => password = value,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, null),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, password),
+            child: const Text("Registrar"),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _handleSignIn() async {
     try {
-      // 1. Login con Google
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return;
 
-      if (googleUser != null) {
-        // 2. Obtener la autenticación para sacar el ID Token
         final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
         final String? idToken = googleAuth.idToken;
-
         if (idToken != null) {
-          _showSnackBar("Conectando con el servidor...");
-
-          // 3. LLAMADA A TU BACKEND usando el Repositorio de GetIt
           final authRepo = getIt<AuthRepository>();
-          final response = await authRepo.loginWithGoogle(idToken);
+          final response = await authRepo.loginWithGoogle(idToken,_passwordController.text);
 
-          // 4. Manejar la respuesta de tu servidor Express
-          debugPrint("Respuesta Servidor: ${response['token']}");
-          _showSnackBar("¡Bienvenido! Token recibido.");
-
-          // Aquí podrías navegar a la pantalla de Inicio
+          if (response['success'] == true) {
+            _showSnackBar("Bienvenido: ${response['user']['nombre_apellido']}");
+            // navegar a home
+          }
         } else {
           throw Exception("No se pudo obtener el ID Token de Google");
         }
-      }
+
     } catch (error) {
       debugPrint("Error de inicio de sesión: $error");
       _showSnackBar("Error: $error");
     }
   }
 
-  Future<void> _fetchContacts() async {
-    if (_user == null) return;
-
-    try {
-      // En v6.x obtenemos los headers directamente de la cuenta
-      final Map<String, String> authHeaders = await _user!.authHeaders;
-
-      final response = await Dio().get(
-        'https://people.googleapis.com/v1/people/me/connections?personFields=names',
-        options: Options(headers: authHeaders),
-      );
-
-      final int total = response.data['totalItems'] ?? 0;
-      setState(() {
-        _contactInfo = "Contactos: $total";
-      });
-    } catch (e) {
-      debugPrint("Error fetching contacts: $e");
-      // Si faltan permisos, solicitamos acceso adicional
-      bool hasScope = await _googleSignIn.canAccessScopes([
-        'https://www.googleapis.com/auth/contacts.readonly'
-      ]);
-      if (!hasScope) {
-        await _googleSignIn.requestScopes([
-          'https://www.googleapis.com/auth/contacts.readonly'
-        ]);
-      }
-    }
-  }
 
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
@@ -116,34 +109,62 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
     if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Google Sign In 6.2.1')),
-      body: Center(
-        child: _user == null
-            ? ElevatedButton(
-          onPressed: _handleSignIn,
-          child: const Text("LOGIN"),
-        )
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: const Text('Lógin')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
           children: [
-            CircleAvatar(
-              backgroundImage: _user!.photoUrl != null
-                  ? NetworkImage(_user!.photoUrl!)
-                  : null,
+            const SizedBox(height: 40),
+            const Icon(Icons.account_balance_wallet, size: 80, color: Colors.blue),
+            const SizedBox(height: 30),
+            // LOGIN NORMAL
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: "Correo Electrónico", border: OutlineInputBorder()),
             ),
-            const SizedBox(height: 10),
-            Text("Hola, ${_user!.displayName}"),
-            Text(_user!.email),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: "Contraseña", border: OutlineInputBorder()),
+            ),
             const SizedBox(height: 20),
-            Text(_contactInfo, style: const TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () { /* Tu lógica de login normal */ },
+                child: const Text("Iniciar Sesión"),
+              ),
+            ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _handleSignOut,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-              child: const Text("SALIR", style: TextStyle(color: Colors.white)),
+            const Row(
+              children: [
+                Expanded(child: Divider()),
+                Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Text("O")),
+                Expanded(child: Divider()),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // BOTÓN GOOGLE CON ICONO
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: OutlinedButton.icon(
+                icon: Image.network(
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Color_Icon.svg/1200px-Google_Color_Icon.svg.png',
+                  height: 24,
+                ),
+                label: const Text("Continuar con Google", style: TextStyle(color: Colors.black87)),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.grey),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                onPressed: _handleSignIn,
+              ),
             ),
           ],
         ),

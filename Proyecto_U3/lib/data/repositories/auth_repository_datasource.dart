@@ -7,7 +7,12 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Map<String, dynamic>> loginWithGoogle(String idToken) {
-    return remoteDataSource.loginWithGoogle(idToken);
+  Future<Map<String, dynamic>> loginWithGoogle(String idToken, String contrasenia) {
+    return remoteDataSource.loginWithGoogle(idToken,contrasenia);
+  }
+
+  @override
+  Future<Map<String, dynamic>> loginNormal(String correo, String contrasenia) {
+    return remoteDataSource.loginNormal(correo, contrasenia);
   }
 }
