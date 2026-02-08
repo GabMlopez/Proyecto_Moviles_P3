@@ -5,17 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4c43a1c-66c8-428d-9ddf-d6e4adc7d04f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/editar_gasto_layout.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/ingresos_layout.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/dio_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/dio_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/gasto_remote_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/gasto_remote_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/ingreso_remote_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/ingreso_remote_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/repositories/gasto_repository_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/repositories/gasto_repository_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/repositories/ingreso_repository_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/repositories/ingreso_repository_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/domain/repository/gasto_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/repository/gasto_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/domain/repository/ingreso_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/repository/ingreso_repository.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/add_gasto_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/add_gasto_layout.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/gastos_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/gastos_layout.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/movimientos_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/movimientos_layout.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/resumen_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/resumen_layout.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/molecule/gasto_data_row.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/molecule/gasto_data_row.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/organism/balance_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/organism/balance_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/organism/trend_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/organism/trend_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,15 +109,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/resumen_layout.dart</url>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -50,5 +50,31 @@ class GastoRepositoryImpl implements GastoRepository {
       rethrow;
     }
   }
+  @override
+  Future<Map<String, dynamic>> getGastosMensuales(int id) async{
+    try{
+      return await remoteDataSource.getGastosMensuales(id);
+    }catch(e){
+      rethrow;
+    }
+  }
 
+  @override
+  Future<Map<String, dynamic>> getGastosPorMes(int id) async{
+    try{
+      return await remoteDataSource.getGastosPorMes(id, 1, 2026);
+    }catch(e){
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getGastosSemanales(int id) async{
+    try{
+      return await remoteDataSource.getGastosSemanales(id);
+    }catch(e){
+      rethrow;
+    }
+    throw UnimplementedError();
+  }
 }

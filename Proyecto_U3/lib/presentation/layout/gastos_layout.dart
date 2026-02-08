@@ -42,6 +42,8 @@ class _GastosLayoutState extends State<GastosLayout> {
                       tipo: 'info',
                       context: context
                   );
+                  setState(() {
+                  });
                 },
                   child: const Text(
                       'Eliminar', style: TextStyle(color: Colors.red))),
@@ -91,6 +93,9 @@ class _GastosLayoutState extends State<GastosLayout> {
         () => context.go('/movimientos/gastos/edit', extra: gasto),
         () {
           _eliminarGasto(gasto.idGasto);
+          setState(() {
+
+          });
         }
     )).toList();
   }

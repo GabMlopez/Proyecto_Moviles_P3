@@ -51,4 +51,32 @@ class IngresoRepositoryImpl implements IngresoRepository {
     }
   }
 
+  @override
+  Future<Map<String, dynamic>> getIngresosMensuales(int id) async{
+    try{
+      return await remoteDataSource.getIngresosMensuales(id);
+    }catch(e){
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getIngresosPorMes(int id) async{
+    try{
+      return await remoteDataSource.getIngresosPorMes(id, 1, 2026);
+    }catch(e){
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getIngresosSemanales(int id) async{
+    try{
+      return await remoteDataSource.getIngresosSemanales(id);
+    }catch(e){
+      rethrow;
+    }
+    throw UnimplementedError();
+  }
+
 }
