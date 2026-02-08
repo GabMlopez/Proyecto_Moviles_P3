@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import '../../domain/entities/gasto.dart';
 import '../../domain/entities/ingreso.dart';
+import '../../domain/repository/gasto_repository.dart';
 import '../../domain/repository/ingreso_repository.dart';
 import '../organism/header_resumen.dart';
 import '../organism/balance_card.dart';
@@ -17,24 +19,28 @@ class ResumenLayout extends StatefulWidget {
 
 class _ResumenLayoutState extends State<ResumenLayout> {
   final _ingresoRepository = GetIt.I<IngresoRepository>();
+  final _gastoRepository = GetIt.I<GastoRepository>();
   List<Ingreso> ingresos = [];
+  List<Gasto> gastos = [];
   double ingresosTotales = 0.0;
   double gastosTotales = 0.0;
   double saldoTotal = 0.0;
   bool _isLoading = false;
 
 
-  void getIngresos() async
+  void getDatos() async
   {
     setState(() {
       _isLoading = true;
     });
     ingresos = await _ingresoRepository.getAllIngresos(1);
+    gastos = await _gastoRepository.getAllGastos(1);
     calcularTotales();
     setState(() {
       _isLoading = false;
     });
   }
+
 
   void calcularTotales()
   {
@@ -42,6 +48,11 @@ class _ResumenLayoutState extends State<ResumenLayout> {
     {
       ingresosTotales += double.parse(ingreso.valor);
     }
+    for(Gasto gasto in gastos)
+    {
+      gastosTotales += double.parse(gasto.valor);
+    }
+
     setState(() {
 
     });
@@ -51,7 +62,7 @@ class _ResumenLayoutState extends State<ResumenLayout> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getIngresos();
+    getDatos();
   }
 
   @override

@@ -88,7 +88,7 @@ class _GastosLayoutState extends State<GastosLayout> {
   List<DataRow> crearFilas(List<Gasto> data)
   {
     return data.map((Gasto gasto)=>GastoDataRow(gasto,
-        () => context.go('/tests/edit', extra: gasto),
+        () => context.go('/movimientos/gastos/edit', extra: gasto),
         () {
           _eliminarGasto(gasto.idGasto);
         }
@@ -100,66 +100,67 @@ class _GastosLayoutState extends State<GastosLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      appBar: AppBar(
-        title: const Text("Gastos"),
-        centerTitle: true,
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ElevatedButton(
-              onPressed: (){
-            context.go('/tests/add', extra: idUsuario);
-          }, child: Row(
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.all(10),
+        child: Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.add),
-              Text("Agregar Gasto")
-            ],
-          )),
-          SizedBox(
-            height: 20,
-          ),
-          FutureBuilder(future: _repository.getAllGastos(1),
-          builder: (context, snapshot){
-            if (snapshot.hasError) {
-              return Center(child: Column(
+              ElevatedButton(
+                  onPressed: (){
+                context.go('/movimientos/gastos/add', extra: idUsuario);
+              }, child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Error: ${snapshot.error}'),
-                  ElevatedButton(onPressed: () {
-                    setState(() {});
-                  }, child: Text('Reintentar'))
+                  Icon(Icons.add),
+                  Text("Agregar Gasto")
                 ],
-              ));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(
-                  child: Text('Aún no ha registrado ningún gasto'));
-            }
-            if(snapshot.hasData) {
-              gastos = snapshot.data!;
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
+              )),
+              SizedBox(
+                height: 20,
+              ),
+              FutureBuilder(future: _repository.getAllGastos(1),
+              builder: (context, snapshot){
+                if (snapshot.hasError) {
+                  return Center(child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Error: ${snapshot.error}'),
+                      ElevatedButton(onPressed: () {
+                        setState(() {});
+                      }, child: Text('Reintentar'))
+                    ],
+                  ));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                      child: Text('Aún no ha registrado ningún gasto'));
+                }
+                if(snapshot.hasData) {
+                  gastos = snapshot.data!;
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    margin: EdgeInsets.all(10),
+                    child: GastosDataTable(gastos),
+                  );
+                }
+                else{
+                  return Center(child: Text('Aún no ha registrado ningún gasto'));
+                }
+              }
+        
                 ),
-                margin: EdgeInsets.all(10),
-                child: GastosDataTable(gastos),
-              );
-            }
-            else{
-              return Center(child: Text('Aún no ha registrado ningún gasto'));
-            }
-          }
-
-            ),
-        ],
-      )));
+            ],
+          ),
+      ),
+    );
 }}
 
 

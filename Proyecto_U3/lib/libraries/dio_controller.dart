@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import '../data/repositories/gasto_repository_datasource.dart';
+import '../domain/repository/gasto_repository.dart';
+import '../data/datasources/remote/gasto_remote_datasource.dart';
 
 import '../data/datasources/remote/ingreso_remote_datasource.dart';
 import '../data/repositories/ingreso_repository_datasource.dart';
@@ -32,5 +35,17 @@ Future<void> setupDependencies() async {
       remoteDataSource: getIt<IngresoRemoteDataSource>(),
     ),
   );
+
+  getIt.registerLazySingleton<GastoRemoteDatasource>(
+        () => GastoRemoteDatasource(dio: dio, baseUrl: baseUrl),
+  );
+
+  getIt.registerLazySingleton<GastoRepository>(
+        () => GastoRepositoryImpl(
+      remoteDataSource: getIt<GastoRemoteDatasource>(),
+    ),
+  );
+
+
 
 }

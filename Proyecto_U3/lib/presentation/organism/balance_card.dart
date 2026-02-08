@@ -37,7 +37,7 @@ class BalanceCard extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            '${calcularBalance().toStringAsFixed(2)}',
+            '\$${calcularBalance().toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w900,
@@ -58,7 +58,7 @@ class BalanceCard extends StatelessWidget {
               Expanded(
                 child: MiniStat(
                   title: 'GASTOS',
-                  value: "\$${gastosTotales.toStringAsPrecision(2)}",
+                  value: "\$${gastosTotales.toStringAsFixed(2)}",
                   valueColor: Color(0xFFE74C3C),
                 ),
               ),

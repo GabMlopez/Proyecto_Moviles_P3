@@ -13,7 +13,7 @@ DataRow GastoDataRow(Gasto gasto, VoidCallback editAction, VoidCallback deleteAc
       Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(7),
-          color: (gasto.estado == "confirmado") ? Colors.green : (gasto == "pendiente") ? Colors.yellow : Colors.red,
+          color: (gasto.estado == "confirmado") ? Colors.green : (gasto.estado == "pendiente") ? Colors.yellow : Colors.red,
         ),
         margin: EdgeInsets.all(1.5),
         padding: EdgeInsets.all(3),

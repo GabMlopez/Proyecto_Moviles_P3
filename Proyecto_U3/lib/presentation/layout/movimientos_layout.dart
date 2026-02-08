@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proyecto_u3/presentation/molecule/ingreso_data_row.dart';
+import 'ingresos_layout.dart';
+import '../molecule/ingreso_data_row.dart';
 import '../../domain/entities/ingreso.dart';
 import '../../domain/repository/ingreso_repository.dart';
 import '../molecule/mensaje_snackbar.dart';
+import 'gastos_layout.dart';
 class MovimientosLayout extends StatefulWidget {
   const MovimientosLayout({super.key});
 
@@ -18,6 +20,7 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
   * */
   List<Ingreso> ingresos = [];
   final columnas = ["Fecha", "Motivo", "Origen", "Método de Pago", "Valor", "Estado", "Acciones"];
+  final _tabs = ["Ingresos", "Gastos"];
   final _repository = GetIt.I<IngresoRepository>();
 
 
@@ -88,7 +91,7 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
   List<DataRow> crearFilas(List<Ingreso> data)
   {
     return data.map((Ingreso ingreso)=>ingresoDataRow(ingreso,
-        () => context.go('/tests/edit', extra: ingreso),
+        () => context.go('/movimientos/ingresos/edit', extra: ingreso),
         () {
           _eliminarIngreso(ingreso.idingreso);
         }
@@ -100,67 +103,28 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      appBar: AppBar(
-        title: const Text("Ingresos"),
-        centerTitle: true,
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ElevatedButton(
-              onPressed: (){
-            context.go('/tests/add', extra: idUsuario);
-          }, child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.add),
-              Text("Agregar Ingreso")
-            ],
-          )),
-          SizedBox(
-            height: 20,
-          ),
-          FutureBuilder(future: _repository.getAllIngresos(1),
-          builder: (context, snapshot){
-            if (snapshot.hasError) {
-              return Center(child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Error: ${snapshot.error}'),
-                  ElevatedButton(onPressed: () {
-                    setState(() {});
-                  }, child: Text('Reintentar'))
-                ],
-              ));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(
-                  child: Text('Aún no ha registrado ningún ingreso'));
-            }
-            if(snapshot.hasData) {
-              ingresos = snapshot.data!;
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                ),
-                margin: EdgeInsets.all(10),
-                child: IngresosDataTable(ingresos),
-              );
-            }
-            else{
-              return Center(child: Text('Aún no ha registrado ningún ingreso'));
-            }
-          }
-
-            ),
-        ],
-      )));
+    return DefaultTabController(
+      length: _tabs.length,
+      child: SafeArea(child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Movimientos"),
+          centerTitle: true,
+          bottom: TabBar(tabs: [
+            Tab(text: _tabs[0], icon: Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.attach_money),
+              Icon(Icons.keyboard_double_arrow_up_rounded)
+            ],),),
+            Tab(text: _tabs[1], icon: Row(mainAxisSize: MainAxisSize.min, children:[
+              Icon(Icons.attach_money),
+              Icon(Icons.keyboard_double_arrow_down_rounded)
+            ]),),
+          ]),
+        ),
+        body: TabBarView(children: [
+          IngresosLayout(),
+          GastosLayout(),
+        ]))),
+    );
 }}
 
 

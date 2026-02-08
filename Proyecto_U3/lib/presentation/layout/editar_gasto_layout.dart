@@ -5,15 +5,15 @@ import 'package:proyecto_u3/presentation/molecule/mensaje_snackbar.dart';
 
 import '../../domain/entities/gasto.dart';
 import '../../domain/repository/gasto_repository.dart';
-class AddGastoLayout extends StatefulWidget {
-  final int idUsuario;
-  AddGastoLayout({super.key, required this.idUsuario});
+class EditarGastoLayout extends StatefulWidget {
+  final Gasto datosGasto;
+  EditarGastoLayout({super.key, required this.datosGasto});
 
   @override
-  State<AddGastoLayout> createState() => _AddGastoLayoutState();
+  State<EditarGastoLayout> createState() => _EditarGastoLayoutState();
 }
 
-class _AddGastoLayoutState extends State<AddGastoLayout> {
+class _EditarGastoLayoutState extends State<EditarGastoLayout> {
   //Repositorio
   final _repository = GetIt.I<GastoRepository>();
 
@@ -66,20 +66,45 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
     else return true;
   }
 
+  bool ValidarCambios(Gasto gastoActualizado)
+  {
+    if(
+        gastoActualizado.descripcion != widget.datosGasto.descripcion
+        || gastoActualizado.valor != widget.datosGasto.valor
+        || gastoActualizado.medioDePago != widget.datosGasto.medioDePago
+        || gastoActualizado.acreedorCobrador != widget.datosGasto.acreedorCobrador
+        || gastoActualizado.estado != widget.datosGasto.estado
+        || gastoActualizado.fecha != widget.datosGasto.fecha
+    )
+    {
+      return true;
+    }
+    else {
+      setState(() {
+        _errorMsg = "No se han hecho cambios";
+      });
+      return false;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fechaController.text = "dd/mm/aaaa";
-    _estadoController.text = "";
-    _medioDePagoController.text = "";
+    _fechaController.text = widget.datosGasto.fecha.toIso8601String().substring(0,10);
+    selectedDate = widget.datosGasto.fecha;
+    _estadoController.text = widget.datosGasto.estado;
+    _descripcionController.text = widget.datosGasto.descripcion;
+    _valorController.text = widget.datosGasto.valor;
+    _medioDePagoController.text = widget.datosGasto.medioDePago;
+    _acreedorCobradorController.text = widget.datosGasto.acreedorCobrador;
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        title: const Text("Agregar Gasto"),
+        title: const Text("Editar Gasto"),
         centerTitle: true,
       ),
       body: Center(
@@ -199,7 +224,6 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
                         DropdownMenuItem(value: "", child: Text("-")),
                         DropdownMenuItem(value: "pendiente", child: Text("pendiente")),
                         DropdownMenuItem(value: "confirmado", child: Text("confirmado")),
-                        DropdownMenuItem(value: "atrasado", child: Text("atrasado")),
                       ],
                       value: _estadoController.text,
                       onChanged: (valor)
@@ -228,7 +252,7 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
                       }, child: Text("Cancelar")),
                       OutlinedButton(onPressed: (){
                         crearGasto();
-                      }, child: Text("Crear")),
+                      }, child: Text("Actualizar")),
                     ],
                   )
               )
@@ -256,6 +280,12 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
   }
 
   Future<void> crearGasto() async{
+    print(_descripcionController.text);
+    print(_valorController.text);
+    print(selectedDate);
+    print(_acreedorCobradorController.text);
+    print(_estadoController.text);
+    print(_medioDePagoController.text);
     if(!validarCamposVacios())
     {
       return;
@@ -265,20 +295,27 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
       return;
     }
 
+    Gasto gastoActualizado= Gasto(
+        idGasto: widget.datosGasto.idGasto,
+        idUsuario: widget.datosGasto.idUsuario,
+        fecha: selectedDate!,
+        valor: _valorController.text,
+        medioDePago: _medioDePagoController.text,
+        acreedorCobrador: _acreedorCobradorController.text,
+        descripcion: _descripcionController.text,
+        estado: _estadoController.text
+    );
+
+    if(!ValidarCambios(gastoActualizado))
+    {
+      return;
+    }
+
     try{
-      _repository.addGasto(Gasto(
-          idGasto: 0,
-          idUsuario: widget.idUsuario,
-          fecha: selectedDate!,
-          valor: _valorController.text,
-          medioDePago: _medioDePagoController.text,
-          acreedorCobrador: _acreedorCobradorController.text,
-          descripcion: _descripcionController.text,
-          estado: _estadoController.text
-      ));
-      mostrarMensaje(mensaje: "Gasto creado correctamente", tipo: "success", context: context);
+      _repository.updateGasto(gastoActualizado);
+      mostrarMensaje(mensaje: "Gasto actualizado correctamente", tipo: "info", context: context);
       context.pop();
-    }catch(e)
+    }catch(e) 
     {
       mostrarMensaje(mensaje: "Error al crear el gasto", tipo: "error", context: context);
       print(e);
