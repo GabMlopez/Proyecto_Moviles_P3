@@ -1,44 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proyecto_u3/presentation/molecule/ingreso_data_row.dart';
-import '../../domain/entities/ingreso.dart';
-import '../../domain/repository/ingreso_repository.dart';
+import 'package:proyecto_u3/presentation/molecule/gasto_data_row.dart';
+import '../../domain/entities/gasto.dart';
+import '../../domain/repository/gasto_repository.dart';
 import '../molecule/mensaje_snackbar.dart';
-class MovimientosLayout extends StatefulWidget {
-  const MovimientosLayout({super.key});
+class GastosLayout extends StatefulWidget {
+  const GastosLayout({super.key});
 
   @override
-  State<MovimientosLayout> createState() => _MovimientosLayoutState();
+  State<GastosLayout> createState() => _GastosLayoutState();
 }
 
-class _MovimientosLayoutState extends State<MovimientosLayout> {
+class _GastosLayoutState extends State<GastosLayout> {
   int idUsuario=1;//Placeholder esto se debe quitar luego
-  /* Como parámetros están los ingresos, las columnas y el repositorio
+  /* Como parámetros están los gastos, las columnas y el repositorio
   * */
-  List<Ingreso> ingresos = [];
-  final columnas = ["Fecha", "Motivo", "Origen", "Método de Pago", "Valor", "Estado", "Acciones"];
-  final _repository = GetIt.I<IngresoRepository>();
+  List<Gasto> gastos = [];
+  final columnas = ["Fecha", "Motivo", "Destinatario", "Método de Pago", "Valor", "Estado", " "];
+  final _repository = GetIt.I<GastoRepository>();
 
 
   /* Esta función muestra un mensaje de confirmación primero
-  * Si acepta, elimina el ingreso y muestra un mensaje de éxito
+  * Si acepta, elimina el gasto y muestra un mensaje de éxito
    */
-  Future<void> _eliminarIngreso(int idI) async {
+  Future<void> _eliminarGasto(int idI) async {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) =>
           AlertDialog(
             title: const Text('¿Eliminar?'),
-            content: Text('¿Realmente quieres eliminar este ingreso?'),
+            content: Text('¿Realmente quieres eliminar este gasto?'),
             actions: [
               TextButton(onPressed: () => Navigator.pop(context, false),
                   child: const Text('Cancelar')),
               TextButton(onPressed: () {
                   Navigator.pop(context, true);
-                  _repository.deleteIngreso(idI);
+                  _repository.deleteGasto(idI);
                   mostrarMensaje(
-                      mensaje: 'Ingreso eliminado correctamente',
+                      mensaje: 'Gasto eliminado correctamente',
                       tipo: 'info',
                       context: context
                   );
@@ -50,11 +50,11 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
     );
   }
 
-  /*Esta función construye la tabla con los ingresos
-  * Recibe una lista de ingresos y convierte cada ingreso en una fila
+  /*Esta función construye la tabla con los gastos
+  * Recibe una lista de gastos y convierte cada gasto en una fila
   * Devuelve un widget de tipo DataTable
   * */
-  Widget IngresosDataTable(List<Ingreso> data){
+  Widget GastosDataTable(List<Gasto> data){
 
     return SingleChildScrollView(
       //El widget es Scrolleable tanto vertical como horizontalmente
@@ -85,12 +85,12 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
 
   //Esta función crea las filas de la tabla
   //Devuleve widgets DataRow
-  List<DataRow> crearFilas(List<Ingreso> data)
+  List<DataRow> crearFilas(List<Gasto> data)
   {
-    return data.map((Ingreso ingreso)=>ingresoDataRow(ingreso,
-        () => context.go('/tests/edit', extra: ingreso),
+    return data.map((Gasto gasto)=>GastoDataRow(gasto,
+        () => context.go('/tests/edit', extra: gasto),
         () {
-          _eliminarIngreso(ingreso.idingreso);
+          _eliminarGasto(gasto.idGasto);
         }
     )).toList();
   }
@@ -102,13 +102,12 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        title: const Text("Ingresos"),
+        title: const Text("Gastos"),
         centerTitle: true,
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ElevatedButton(
               onPressed: (){
@@ -117,13 +116,13 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.add),
-              Text("Agregar Ingreso")
+              Text("Agregar Gasto")
             ],
           )),
           SizedBox(
             height: 20,
           ),
-          FutureBuilder(future: _repository.getAllIngresos(1),
+          FutureBuilder(future: _repository.getAllGastos(1),
           builder: (context, snapshot){
             if (snapshot.hasError) {
               return Center(child: Column(
@@ -141,20 +140,20 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(
-                  child: Text('Aún no ha registrado ningún ingreso'));
+                  child: Text('Aún no ha registrado ningún gasto'));
             }
             if(snapshot.hasData) {
-              ingresos = snapshot.data!;
+              gastos = snapshot.data!;
               return Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                 ),
                 margin: EdgeInsets.all(10),
-                child: IngresosDataTable(ingresos),
+                child: GastosDataTable(gastos),
               );
             }
             else{
-              return Center(child: Text('Aún no ha registrado ningún ingreso'));
+              return Center(child: Text('Aún no ha registrado ningún gasto'));
             }
           }
 

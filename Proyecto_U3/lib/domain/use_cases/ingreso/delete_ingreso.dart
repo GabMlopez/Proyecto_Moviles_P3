@@ -5,7 +5,7 @@ class DeleteIngreso{
 
   DeleteIngreso(this.repo);
 
-  Future<void> call(int idI, int idU) async {
-    return repo.deleteIngreso(idI, idU);
+  Future<void> call(int idI) async {
+    return repo.deleteIngreso(idI);
   }
 }

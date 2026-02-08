@@ -50,7 +50,7 @@ class BalanceCard extends StatelessWidget {
               Expanded(
                 child: MiniStat(
                   title: 'INGRESOS',
-                  value: "${ingresosTotales.toStringAsFixed(2)}",
+                  value: "\$${ingresosTotales.toStringAsFixed(2)}",
                   valueColor: Color(0xFF14A44D),
                 ),
               ),
@@ -58,7 +58,7 @@ class BalanceCard extends StatelessWidget {
               Expanded(
                 child: MiniStat(
                   title: 'GASTOS',
-                  value: "${gastosTotales.toStringAsPrecision(2)}",
+                  value: "\$${gastosTotales.toStringAsPrecision(2)}",
                   valueColor: Color(0xFFE74C3C),
                 ),
               ),

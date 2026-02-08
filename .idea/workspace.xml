@@ -5,9 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4c43a1c-66c8-428d-9ddf-d6e4adc7d04f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/gasto_remote_datasource.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/repositories/gasto_repository_datasource.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/entities/gasto.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/repository/gasto_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/gasto/create_gasto.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/gasto/delete_gasto.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/gasto/get_gasto.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/gasto/get_gastos.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/gasto/update_gasto.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/gastos_layout.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/molecule/gasto_data_row.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/ingreso_remote_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/ingreso_remote_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/repositories/ingreso_repository_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/repositories/ingreso_repository_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/domain/repository/ingreso_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/repository/ingreso_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/ingreso/delete_ingreso.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/ingreso/delete_ingreso.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/movimientos_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/movimientos_layout.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/resumen_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/resumen_layout.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/test_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/test_layout.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/organism/balance_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/organism/balance_card.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,14 +71,18 @@
     "git-widget-placeholder": "main",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/marpa/AndroidStudioProjects/Proyecto_Moviles_P3/Proyecto_U3/lib/presentation/layout",
+    "last_opened_file_path": "C:/Users/marpa/AndroidStudioProjects/Proyecto_Moviles_P3/Proyecto_U3/lib/presentation/molecule",
     "settings.editor.selected.configurable": "com.android.studio.ml.bot.mainConfigurable",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\presentation\molecule" />
       <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\presentation\layout" />
+      <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\domain\use_cases\gasto" />
+      <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\data\datasources\remote" />
+      <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\domain\repository" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3" />
@@ -84,5 +103,19 @@
       <updated>1770499701417</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/Proyecto_U3/lib/domain/use_cases/gasto/create_gasto.dart</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/gastos_layout.dart</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

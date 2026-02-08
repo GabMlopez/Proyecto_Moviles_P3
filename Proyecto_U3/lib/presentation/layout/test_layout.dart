@@ -236,7 +236,7 @@ class _TestLayoutState extends State<TestLayout> {
 
     try {
       final repo = GetIt.I<IngresoRepository>();
-      await repo.deleteIngreso(idI,idU);
+      await repo.deleteIngreso(idI);
       setState(() {
         mensaje = 'Éxito: Ingreso ID $idI eliminado';
       });
