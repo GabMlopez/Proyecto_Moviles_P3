@@ -1,5 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.INTERNET" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gabweor.proyecto_u3">
+<uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="proyecto_u3"
         android:name="${applicationName}"

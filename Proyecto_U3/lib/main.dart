@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import './libraries/dio_controller.dart';
 import './libraries/route_controller.dart';
 
 Future<void> main() async {
+  await   dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
 
   await setupDependencies();
