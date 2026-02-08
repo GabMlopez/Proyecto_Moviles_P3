@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proyecto_u3/presentation/layout/add_ingreso_layout.dart';
 import 'package:proyecto_u3/presentation/layout/test_layout.dart';
 import 'package:proyecto_u3/presentation/organism/bottom_nav.dart';
 
+import '../domain/entities/ingreso.dart';
+import '../presentation/layout/editar_ingreso_layout.dart';
+import '../presentation/layout/movimientos_layout.dart';
 import '../presentation/layout/resumen_layout.dart';//
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -36,7 +40,26 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: '/tests',
               name: 'tests',
-              builder: (context, state) => const TestLayout(),
+              builder: (context, state) => MovimientosLayout(),
+              routes: [
+                GoRoute(
+                  path: 'add',
+                  name: 'add',
+                  builder: (context, state) {
+                    int idUsuario = state.extra as int;
+                    return AddIngresoLayout(idUsuario: idUsuario);
+                  },
+                ),
+                GoRoute(
+                  path: 'edit',
+                  name: 'edit',
+                  builder: (context, state) {
+                    Ingreso ingreso = state.extra as Ingreso;
+                    return EditarIngresoLayout(datosIngreso: ingreso);
+                  },
+                ),
+
+              ]
             ),
           ],
         ),

@@ -9,7 +9,7 @@ final getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   //cambiar segun el ip del computador de la red
-  final String baseUrl = 'http://192.168.100.12:3001';
+  final String baseUrl = 'http://192.168.100.138:3001';
 
   final dio = Dio(
     BaseOptions(
