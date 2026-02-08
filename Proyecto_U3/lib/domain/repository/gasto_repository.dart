@@ -6,4 +6,7 @@ abstract class GastoRepository {
   Future<void> addGasto(Gasto gasto);
   Future<void> updateGasto(Gasto gasto);
   Future<void> deleteGasto(int idG);
+  Future<Map<String, dynamic>> getGastosPorMes(int id);
+  Future<Map<String, dynamic>> getGastosMensuales(int id);
+  Future<Map<String, dynamic>> getGastosSemanales(int id);
 }

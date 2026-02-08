@@ -15,8 +15,12 @@ final getIt = GetIt.instance;
 
 Future<void> setupDependencies() async {
   //cambiar segun el ip del computador de la red
+<<<<<<< HEAD
     final String baseUrl = dotenv.env['BASE_URL'] ??
         const String.fromEnvironment('BASE_URL', defaultValue: '');
+=======
+  final String baseUrl = 'https://api-finanzas-25dh.onrender.com';
+>>>>>>> cf6683b99aefe86debab96b4cd31946fc816b95c
 
     if (baseUrl.isEmpty) {
       throw Exception('Falta BASE URL');

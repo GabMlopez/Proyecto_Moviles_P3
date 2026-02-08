@@ -21,11 +21,15 @@ class ResumenLayout extends StatefulWidget {
 class _ResumenLayoutState extends State<ResumenLayout> {
   final _ingresoRepository = GetIt.I<IngresoRepository>();
   final _gastoRepository = GetIt.I<GastoRepository>();
+  Map<String, dynamic> ingresos_semanales={};
+  Map<String, dynamic> gastos_semanales={};
+
   List<Ingreso> ingresos = [];
   List<Gasto> gastos = [];
   double ingresosTotales = 0.0;
   double gastosTotales = 0.0;
-  double saldoTotal = 0.0;
+  int mes_actual=2;
+  int anio_actual=2026;
   bool _isLoading = false;
 
 
@@ -34,42 +38,60 @@ class _ResumenLayoutState extends State<ResumenLayout> {
     setState(() {
       _isLoading = true;
     });
-    ingresos = await _ingresoRepository.getAllIngresos(1);
-    gastos = await _gastoRepository.getAllGastos(1);
-    calcularTotales();
+    final resultados = await Future.wait([
+      _ingresoRepository.getIngresosMensuales(1),
+      _gastoRepository.getGastosMensuales(1),
+      _ingresoRepository.getIngresosSemanales(1),
+      _gastoRepository.getGastosSemanales(1),
+    ]);
+    print(resultados[0]);
+    print(resultados[1]);
+    print(resultados[2]);
+    print(resultados[3]);
+
+    //Guarda los resultados semanales
+    ingresos_semanales = resultados[2];
+    gastos_semanales = resultados[3];
+
+    //Recibe las listas y los totales
+    Map<String, dynamic> data_ingresos= resultados[0];
+    Map<String, dynamic> data_gastos= resultados[1];
+    //Extrae gastos e ingresos y los pasa a objetos de dart
+    List map_ingresos = data_ingresos["ingresos"];
+    List map_gastos = data_gastos["gastos"];
+    for(int i=0; i<map_ingresos.length; i++){
+      ingresos.add(Ingreso.fromJson(map_ingresos[i]));
+    }
+    for(int i=0; i<map_gastos.length; i++){
+      gastos.add(Gasto.fromJson(map_gastos[i]));
+    }
+
+
+    //Recibe los totales
+    gastosTotales=data_gastos["total"];
+    ingresosTotales=data_ingresos["total"];
+
+
     setState(() {
       _isLoading = false;
     });
   }
 
-
-  void calcularTotales()
+  void receiveData()
   {
-    for(Ingreso ingreso in ingresos)
-    {
-      ingresosTotales += double.parse(ingreso.valor);
-    }
-    for(Gasto gasto in gastos)
-    {
-      gastosTotales += double.parse(gasto.valor);
-    }
-
-    setState(() {
-
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
     getDatos();
   }
 
   @override
+  void initState() {
+    super.initState();
+    getDatos();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     const bg = Color(0xFFF6F7FB);
-
     return Scaffold(
       backgroundColor: bg,
       body: SafeArea(
@@ -83,9 +105,11 @@ class _ResumenLayoutState extends State<ResumenLayout> {
               gastosTotales: gastosTotales,
             )),
             SliverToBoxAdapter(child: SizedBox(height: 14)),
-            SliverToBoxAdapter(child: TrendCard()),
+            SliverToBoxAdapter(child: TrendCard(
+              data_gastos: gastos_semanales,
+              data_ingresos: ingresos_semanales,
+            )),
             SliverToBoxAdapter(child: SizedBox(height: 14)),
-            SliverToBoxAdapter(child: SpendingCard()),
             SliverToBoxAdapter(child: SizedBox(height: 14)),
             SliverToBoxAdapter(child: LastMovementsCard()),
             SliverToBoxAdapter(child: SizedBox(height: 18)),

@@ -25,7 +25,7 @@ class BalanceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Balance actual',
+                  'Balance mensual',
                   style: TextStyle(
                     color: Color(0xFF7B8494),
                     fontWeight: FontWeight.w600,

@@ -27,7 +27,7 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: '/home',
               name: 'home',
-              builder: (context, state) => const ResumenLayout(),
+              builder: (context, state) => ResumenLayout(),
             ),
           ],
         ),

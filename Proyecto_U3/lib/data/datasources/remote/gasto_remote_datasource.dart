@@ -54,6 +54,66 @@ class GastoRemoteDatasource {
     }
   }
 
+  Future<Map<String, dynamic>> getGastosPorMes(int idUsuario, int mes, int anio) async {
+    try {
+      late String url = baseUrl + '/gastos/user/$idUsuario/mes';
+      final response = await dio.get(
+          url,
+          data: {
+            'mes': mes,
+            'anio': anio,
+          });
+      if (response.statusCode == 200) {
+        final gastosMensuales = response.data as Map<String, dynamic>;
+        return gastosMensuales;
+      } else {
+        throw Exception('Error al obtener: ${response.statusCode}');
+      }
+    }
+    on DioException catch(e)
+    {
+      throw Exception('Error de red: ${e.message}');
+    }
+  }
+
+  Future<Map<String, dynamic>> getGastosMensuales(int idUsuario) async {
+    try {
+      late String url = baseUrl + '/gastos/user/$idUsuario/mensual';
+      final response = await dio.get(
+        url,
+      );
+      if (response.statusCode == 200) {
+        final gastosMensuales = response.data as Map<String, dynamic>;
+        return gastosMensuales;
+      } else {
+        throw Exception('Error al obtener: ${response.statusCode}');
+      }
+    }
+    on DioException catch(e)
+    {
+      throw Exception('Error de red: ${e.message}');
+    }
+  }
+
+  Future<Map<String, dynamic>> getGastosSemanales(int idUsuario) async {
+    try {
+      late String url = baseUrl + '/gastos/user/$idUsuario/semanal';
+      final response = await dio.get(
+        url,
+      );
+      if (response.statusCode == 200) {
+        final gastosSemanales = response.data as Map<String, dynamic>;
+        return gastosSemanales;
+      } else {
+        throw Exception('Error al obtener: ${response.statusCode}');
+      }
+    }
+    on DioException catch(e)
+    {
+      throw Exception('Error de red: ${e.message}');
+    }
+  }
+
   Future<void> addGasto(Gasto gasto) async {
     try {
       late String url = baseUrl + '/gastos';

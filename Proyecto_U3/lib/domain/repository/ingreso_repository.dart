@@ -6,4 +6,9 @@ abstract class IngresoRepository {
   Future<void> addIngreso(Ingreso ingreso);
   Future<void> updateIngreso(Ingreso ingreso);
   Future<void> deleteIngreso(int idI);
+  Future<Map<String, dynamic>> getIngresosPorMes(int id);
+  Future<Map<String, dynamic>> getIngresosMensuales(int id);
+  Future<Map<String, dynamic>> getIngresosSemanales(int id);
 }
+
+
