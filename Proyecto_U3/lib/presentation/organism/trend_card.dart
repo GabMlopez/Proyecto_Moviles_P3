@@ -30,7 +30,9 @@ class TrendCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 12),
-              SizedBox(height: 62, child: SimpleLineChart()),
+              SizedBox(height: 62, child: SimpleLineChart(
+
+              )),
               SizedBox(height: 10),
               Text(
                 'positivo = ahorras, negativo = gastas más de lo que\ningresas.',

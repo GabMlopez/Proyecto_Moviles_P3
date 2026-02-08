@@ -1,23 +1,23 @@
 import 'package:dio/dio.dart';
-import '../../../../domain/entities/ingreso.dart';
+import '../../../../domain/entities/gasto.dart';
 
-class IngresoRemoteDataSource {
+class GastoRemoteDatasource {
   final Dio dio;
   final String baseUrl;
 
-  IngresoRemoteDataSource({required this.dio, required this.baseUrl});
+  GastoRemoteDatasource({required this.dio, required this.baseUrl});
 
-  Future<List<Ingreso>> getAllIngresos(int idUsuario) async {
+  Future<List<Gasto>> getAllGastos(int idUsuario) async {
     try {
-      late String url = baseUrl + '/ingresos/user/$idUsuario';
+      late String url = baseUrl + '/gastos/user/$idUsuario';
       final response = await dio.get(
         url,
       );
       if (response.statusCode == 200) {
-        final ingresoResponse = IngresoResponse.fromJson(
+        final gastoResponse = GastoResponse.fromJson(
           response.data as Map<String, dynamic>,
         );
-        return ingresoResponse.ingresos;
+        return gastoResponse.gastos;
       } else {
         throw Exception('Error del servidor: ${response.statusCode}');
       }
@@ -32,69 +32,69 @@ class IngresoRemoteDataSource {
     }
   }
 
-  Future<Ingreso> getIngresoById(int idIngreso) async {
+  Future<Gasto> getGastoById(int idGasto) async {
     try {
-      late String url = baseUrl + '/ingresos/$idIngreso';
+      late String url = baseUrl + '/gastos/$idGasto';
       final response = await dio.get(
         url,
       );
 
       if (response.statusCode == 200) {
-        final ingresoResponse =
-        IngresoResponse.fromJson(response.data as Map<String, dynamic>);
-        if (ingresoResponse.ingresos.isEmpty) {
-          throw Exception('Ingreso no encontrado');
+        final gastoResponse =
+        GastoResponse.fromJson(response.data as Map<String, dynamic>);
+        if (gastoResponse.gastos.isEmpty) {
+          throw Exception('Gasto no encontrado');
         }
-        return ingresoResponse.ingresos.first;
+        return gastoResponse.gastos.first;
       } else {
-        throw Exception('Error al obtener ingreso: ${response.statusCode}');
+        throw Exception('Error al obtener gasto: ${response.statusCode}');
       }
     } on DioException catch (e) {
       throw Exception('Error de red: ${e.message}');
     }
   }
 
-  Future<void> addIngreso(Ingreso ingreso) async {
+  Future<void> addGasto(Gasto gasto) async {
     try {
-      late String url = baseUrl + '/ingresos';
+      late String url = baseUrl + '/gastos';
       final response = await dio.post(
         url,
-        data: ingreso.toJson(),
+        data: gasto.toJson(),
       );
 
       if (response.statusCode != 201 && response.statusCode != 200) {
-        throw Exception('Error al crear ingreso');
+        throw Exception('Error al crear gasto');
       }
     } on DioException catch (e) {
       throw Exception('Error al crear: ${e.response?.data ?? e.message}');
     }
   }
 
-  Future<void> updateIngreso(Ingreso ingreso) async {
+  Future<void> updateGasto(Gasto gasto) async {
     try {
-      late String url = baseUrl + '/ingresos/${ingreso.idingreso}';
+      late String url = baseUrl + '/gastos/${gasto.idGasto}';
       final response = await dio.put(
         url,
-        data: ingreso.toJson(),
+        data: gasto.toJson(),
       );
 
       if (response.statusCode != 200) {
-        throw Exception('Error al actualizar ingreso');
+        throw Exception('Error al actualizar gasto');
       }
     } on DioException catch (e) {
       throw Exception('Error al actualizar: ${e.response?.data ?? e.message}');
     }
   }
 
-  Future<void> deleteIngreso(int idIngreso) async {
+  Future<void> deleteGasto(int idGasto) async {
     try {
-      late String url = baseUrl + '/ingresos/$idIngreso';
+      late String url = baseUrl + '/gastos/$idGasto';
       final response = await dio.delete(
         url
       );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
-        throw Exception('Error al eliminar ingreso');
+        throw Exception('Error al eliminar gasto');
       }
     } on DioException catch (e) {
       throw Exception('Error al eliminar: ${e.response?.data ?? e.message}');

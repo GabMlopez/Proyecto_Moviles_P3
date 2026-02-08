@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proyecto_u3/presentation/layout/login.dart';
 import 'package:proyecto_u3/presentation/layout/test_layout.dart';
 import 'package:proyecto_u3/presentation/organism/bottom_nav.dart';
 
@@ -47,7 +46,7 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: '/tests1',
               name: 'tests1',
-              builder: (context, state) => const SimpleLoginScreen(),
+              builder: (context, state) => const TestLayout(),
             ),
           ],
         ),

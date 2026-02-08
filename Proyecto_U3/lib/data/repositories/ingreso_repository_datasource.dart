@@ -43,9 +43,9 @@ class IngresoRepositoryImpl implements IngresoRepository {
   }
 
   @override
-  Future<void> deleteIngreso(int iding, int iduser) async {
+  Future<void> deleteIngreso(int iding) async {
     try{
-      await remoteDataSource.deleteIngreso(iding,iduser);
+      await remoteDataSource.deleteIngreso(iding);
     }catch(e){
       rethrow;
     }

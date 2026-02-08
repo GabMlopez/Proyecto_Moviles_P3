@@ -21,11 +21,9 @@ class AuthService {
       // 2. Obtener los detalles de autenticación
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      // 3. ESTE es el idToken que necesita tu método de Dio
       final String? idToken = googleAuth.idToken;
 
       if (idToken != null) {
-        // 4. Llamada a tu implementación de Dio
         final response = await authRemoteDataSource.loginWithGoogle(idToken);
 
         print("Servidor respondió con éxito: ${response}");

@@ -5,5 +5,5 @@ abstract class IngresoRepository {
   Future<Ingreso> getIngresoById(int id);
   Future<void> addIngreso(Ingreso ingreso);
   Future<void> updateIngreso(Ingreso ingreso);
-  Future<void> deleteIngreso(int idI , int idU);
+  Future<void> deleteIngreso(int idI);
 }
