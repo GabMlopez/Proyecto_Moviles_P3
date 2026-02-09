@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:proyecto_u3/presentation/global_manager/user_provider.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../libraries/dio_controller.dart';
 
@@ -13,6 +15,7 @@ class SimpleLoginScreen extends StatefulWidget {
 }
 
 class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
+  bool _isLoading = false;
   late final GoogleSignIn _googleSignIn;
   GoogleSignInAccount? _user;
   final TextEditingController _emailController = TextEditingController();
@@ -22,6 +25,12 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
   void initState() {
     super.initState();
     _setupGoogleSignIn();
+  }
+
+  void _setLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
   }
 
   void _setupGoogleSignIn() {
@@ -113,9 +122,13 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
   }
 
   Future<void> _handleSignIn() async {
+    _setLoading(true);
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return;
+      if (googleUser == null) {
+        _setLoading(false);
+        return;
+      };
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final String? idToken = googleAuth.idToken;
@@ -125,18 +138,20 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
         if (contra == null) {
           _googleSignIn.signOut();
+          _setLoading(false);
           return;
         }
 
         final authRepo = getIt<AuthRepository>();
         final response = await authRepo.loginWithGoogle(idToken, contra);
         if (response['success'] == true) {
-          final userData = response['data']['user'];
-          bool esNuevo = response['data']['esNuevoUsuario'] ?? false;
-          String nombre = userData['nombre_apellido'];
-          _showSnackBar(esNuevo
-              ? "¡Cuenta creada con éxito! Bienvenido $nombre"
-              : "Bienvenido de nuevo, $nombre");
+          final data = response['data'];
+          final String token = data['token'];
+          final Map<String, dynamic> userData = data['user'];
+
+          context.read<UserProvider>().setAuthData(token, userData);
+          final id = context.read<UserProvider>().idUsuario;
+          _showSnackBar("Login con Google exitoso. ID: $id");
         }
 
         _passwordControllerGoogle.clear();
@@ -145,6 +160,9 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
     } catch (error) {
       debugPrint("Error: $error");
       _showSnackBar("Error al iniciar sesión");
+
+    }finally{
+      _setLoading(false);
       _passwordControllerGoogle.clear();
       _googleSignIn.signOut();
     }
@@ -156,30 +174,37 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
     if (email.isEmpty || password.isEmpty) {
       _showSnackBar("Por favor, completa todos los campos");
+      _setLoading(false);
       return;
     }
-
+    _setLoading(true);
     try {
       final authRepo = getIt<AuthRepository>();
       final response = await authRepo.loginNormal(email, password);
 
       if (response['success'] == true) {
+          final String token = response['token'];
+          final Map<String, dynamic> userData = response['user'];
 
-        final data = response['data'];
 
-        if (data != null && data['user'] != null) {
-          final userData = data['user'];
-          String nombre = userData['nombre_apellido'] ?? "Usuario";
-          _showSnackBar("¡Bienvenido de nuevo, $nombre!");
-        } else {
-          _showSnackBar("Login exitoso");
-        }
+          if (mounted) {
+            context.read<UserProvider>().setAuthData(token, userData);
+
+            final id = context.read<UserProvider>().idUsuario;
+            _showSnackBar("¡Bienvenido! Tu ID es: $id");
+
+            //Navegación
+
+          }
+
       } else {
         _showSnackBar(response['message'] ?? "Credenciales incorrectas");
       }
     } catch (error) {
       debugPrint("Error en Login: $error");
       _showSnackBar("Usuario o contraseña incorrectos");
+    }finally{
+      _setLoading(false);
     }
   }
   void _showSnackBar(String msg) {
@@ -220,8 +245,14 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: _handleNormalLogin,
-                child: const Text("Iniciar Sesión"),
+                onPressed: _isLoading ? null : _handleNormalLogin,
+                child: _isLoading
+                    ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                )
+                    : const Text("Iniciar Sesión"),
               ),
             ),
             const SizedBox(height: 20),
@@ -238,16 +269,13 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
               width: double.infinity,
               height: 50,
               child: OutlinedButton.icon(
-                icon: Image.asset(
-                  'assets/iconGoogle.png',
-                  height: 24,
-                ),
-                label: const Text("Continuar con Google", style: TextStyle(color: Colors.black87)),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.grey),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                ),
-                onPressed: _handleSignIn,
+                icon: _isLoading
+                    ? const SizedBox.shrink()
+                    : Image.asset('assets/iconGoogle.png', height: 24),
+                label: _isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text("Continuar con Google", style: TextStyle(color: Colors.black87)),
+                onPressed: _isLoading ? null : _handleSignIn,
               ),
             ),
           ],
