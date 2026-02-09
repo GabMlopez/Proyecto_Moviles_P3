@@ -14,13 +14,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<Map<String, dynamic>> loginWithGoogle(String idToken,String contrasenia) async {
     try {
-      print(idToken);
       final response = await dio.post(
         '/google/login',
         data: {'idToken': idToken,
         'contrasenia':contrasenia},
       );
-      print(response);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response.data as Map<String, dynamic>;
       }

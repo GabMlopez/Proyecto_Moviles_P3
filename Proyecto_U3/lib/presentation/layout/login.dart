@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,7 +17,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
   GoogleSignInAccount? _user;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  final TextEditingController _passwordControllerGoogle = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -31,6 +30,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
       scopes: [
         'email',
         'https://www.googleapis.com/auth/contacts.readonly',
+        'openid',
       ],
     );
 
@@ -45,35 +45,70 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
     _googleSignIn.signInSilently();
   }
 
+  bool _isPasswordValid(String password) {
+    final passwordRegex = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&]{8,128}$',
+    );
+    return passwordRegex.hasMatch(password);
+  }
+
   Future<String?> _showPasswordDialog() async {
-    String? password;
+    final formKey = GlobalKey<FormState>();
+    _passwordControllerGoogle.clear();
+
     return showDialog<String>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text("Crea una contraseña"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text("Para completar tu registro, asigna una contraseña a tu cuenta."),
-            TextField(
-              obscureText: true,
-              decoration: const InputDecoration(labelText: "Contraseña"),
-              onChanged: (value) => password = value,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Crea una contraseña"),
+          content: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Debe contener entre 8 y 128 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales.",
+                  style: TextStyle(fontSize: 12),
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _passwordControllerGoogle,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: "Contraseña",
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "La contraseña es obligatoria";
+                    }
+                    if (!_isPasswordValid(value)) {
+                      return "No cumple con los requisitos de seguridad";
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, null),
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Validar el formulario antes de cerrar
+                if (formKey.currentState!.validate()) {
+                  Navigator.pop(context, _passwordControllerGoogle.text);
+                }
+              },
+              child: const Text("Registrar"),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, null),
-            child: const Text("Cancelar"),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, password),
-            child: const Text("Registrar"),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -82,31 +117,80 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return;
 
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        final String? idToken = googleAuth.idToken;
-        if (idToken != null) {
-          final authRepo = getIt<AuthRepository>();
-          final response = await authRepo.loginWithGoogle(idToken,_passwordController.text);
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
 
-          if (response['success'] == true) {
-            _showSnackBar("Bienvenido: ${response['user']['nombre_apellido']}");
-            // navegar a home
-          }
-        } else {
-          throw Exception("No se pudo obtener el ID Token de Google");
+      if (idToken != null) {
+        final String? contra = await _showPasswordDialog();
+
+        if (contra == null) {
+          _googleSignIn.signOut();
+          return;
         }
 
+        final authRepo = getIt<AuthRepository>();
+        final response = await authRepo.loginWithGoogle(idToken, contra);
+        if (response['success'] == true) {
+          final userData = response['data']['user'];
+          bool esNuevo = response['data']['esNuevoUsuario'] ?? false;
+          String nombre = userData['nombre_apellido'];
+          _showSnackBar(esNuevo
+              ? "¡Cuenta creada con éxito! Bienvenido $nombre"
+              : "Bienvenido de nuevo, $nombre");
+        }
+
+        _passwordControllerGoogle.clear();
+        _googleSignIn.signOut();
+      }
     } catch (error) {
-      debugPrint("Error de inicio de sesión: $error");
-      _showSnackBar("Error: $error");
+      debugPrint("Error: $error");
+      _showSnackBar("Error al iniciar sesión");
+      _passwordControllerGoogle.clear();
+      _googleSignIn.signOut();
     }
   }
 
+  Future<void> _handleNormalLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+    if (email.isEmpty || password.isEmpty) {
+      _showSnackBar("Por favor, completa todos los campos");
+      return;
+    }
 
+    try {
+      final authRepo = getIt<AuthRepository>();
+      final response = await authRepo.loginNormal(email, password);
+
+      if (response['success'] == true) {
+
+        final data = response['data'];
+
+        if (data != null && data['user'] != null) {
+          final userData = data['user'];
+          String nombre = userData['nombre_apellido'] ?? "Usuario";
+          _showSnackBar("¡Bienvenido de nuevo, $nombre!");
+        } else {
+          _showSnackBar("Login exitoso");
+        }
+      } else {
+        _showSnackBar(response['message'] ?? "Credenciales incorrectas");
+      }
+    } catch (error) {
+      debugPrint("Error en Login: $error");
+      _showSnackBar("Usuario o contraseña incorrectos");
+    }
+  }
   void _showSnackBar(String msg) {
-    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        duration: const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   Widget build(BuildContext context) {
@@ -136,7 +220,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () { /* Tu lógica de login normal */ },
+                onPressed: _handleNormalLogin,
                 child: const Text("Iniciar Sesión"),
               ),
             ),
@@ -154,8 +238,8 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
               width: double.infinity,
               height: 50,
               child: OutlinedButton.icon(
-                icon: Image.network(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Color_Icon.svg/1200px-Google_Color_Icon.svg.png',
+                icon: Image.asset(
+                  'assets/iconGoogle.png',
                   height: 24,
                 ),
                 label: const Text("Continuar con Google", style: TextStyle(color: Colors.black87)),
