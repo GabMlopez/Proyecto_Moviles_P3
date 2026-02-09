@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 abstract class AuthRemoteDataSource {
   Future<Map<String, dynamic>> loginWithGoogle(String idToken, String contrasenia);
   Future<Map<String, dynamic>> loginNormal(String correo, String password);
+  Future<Map<String, dynamic>?> buscarUsuarioPorCorreo(String correo);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -48,6 +49,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return response.data;
     } on DioException catch (e) {
       throw Exception(e.response?.data['error'] ?? 'Error de credenciales');
+    }
+  }
+
+  Future<Map<String, dynamic>?> buscarUsuarioPorCorreo(String correo) async {
+    try {
+      final response = await dio.get('/user/$correo');
+      if (response.statusCode == 200 && response.data != null) {
+        return response.data as Map<String, dynamic>;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
   }
 }

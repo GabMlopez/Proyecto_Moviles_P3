@@ -132,9 +132,18 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final String? idToken = googleAuth.idToken;
-
+      final String email = googleUser.email;
       if (idToken != null) {
-        final String? contra = await _showPasswordDialog();
+        final authRepo = getIt<AuthRepository>();
+        final existingUserResponse = await authRepo.buscarUsuarioPorCorreo(email);
+        final String? contra;
+        if (existingUserResponse != null && existingUserResponse['idusuario'] != null) {
+          contra = "USUARIO_EXISTENTE_GOOGLE";
+        } else {
+          _setLoading(false);
+          contra = await _showPasswordDialog();
+          _setLoading(true);
+        }
 
         if (contra == null) {
           _googleSignIn.signOut();
@@ -142,7 +151,6 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
           return;
         }
 
-        final authRepo = getIt<AuthRepository>();
         final response = await authRepo.loginWithGoogle(idToken, contra);
         if (response['success'] == true) {
           final data = response['data'];
@@ -151,7 +159,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
           context.read<UserProvider>().setAuthData(token, userData);
           final id = context.read<UserProvider>().idUsuario;
-          _showSnackBar("Login con Google exitoso. ID: $id");
+          _showSnackBar("Login con Google exitoso. Bienvenido ${data['user']['nombre_apellido']}");
         }
 
         _passwordControllerGoogle.clear();
@@ -207,6 +215,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
       _setLoading(false);
     }
   }
+
   void _showSnackBar(String msg) {
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -221,7 +230,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Lógin')),
+      appBar: AppBar(title: const Text('Login')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(

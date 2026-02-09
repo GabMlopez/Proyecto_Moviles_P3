@@ -15,4 +15,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Map<String, dynamic>> loginNormal(String correo, String contrasenia) {
     return remoteDataSource.loginNormal(correo, contrasenia);
   }
+
+  @override
+  Future<Map<String, dynamic>?> buscarUsuarioPorCorreo(String correo){
+    return remoteDataSource.buscarUsuarioPorCorreo(correo);
+  }
 }
