@@ -70,7 +70,7 @@ class TrendCard extends StatelessWidget {
                     lineTouchData: LineTouchData(
                       enabled: true,
                       touchTooltipData: LineTouchTooltipData(
-                        getTooltipColor: (data) => Colors.grey[200]!,
+                        getTooltipColor: (data) => Color(0xFF2B2F3A),
                     )),
                     gridData: FlGridData(show: false), // Limpia el fondo
                     titlesData: FlTitlesData(
@@ -109,13 +109,13 @@ class TrendCard extends StatelessWidget {
                             return FlDotCirclePainter(
                               radius: 4,
                               color: Colors.white,
-                              strokeColor: Colors.blue[900]!,
+                              strokeColor: const Color(0xFF2B2F3A),
                               strokeWidth: 2,
                             );}
                         ),
                         spots: _crearPuntos(), // Los puntos procesados
                         isCurved: true,
-                        color: Colors.blue[900],
+                        color: const Color(0xFF3613AB),
                         barWidth: 4,
                         belowBarData: BarAreaData(show: true, color: Colors.blue.withOpacity(0.3)),
                       ),

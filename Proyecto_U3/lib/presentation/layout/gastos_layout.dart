@@ -85,6 +85,8 @@ class _GastosLayoutState extends State<GastosLayout> {
             dataRowMaxHeight: 70,
             sortAscending: true,
             sortColumnIndex: 0,
+            headingRowColor: WidgetStateProperty.all(const Color(0xFFE3F2FD)), // El azul tenue
+            headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
             columns: crearColumnas(columnas),
             rows: crearFilas(data)
         ),

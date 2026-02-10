@@ -20,8 +20,13 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
       length: _tabs.length,
       child: SafeArea(child: Scaffold(
         appBar: AppBar(
-          title: Text("Movimientos"),
+          title: const Text("Movimientos", style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+          ),),
+          backgroundColor: const Color(0xFFE3F2FD),
           centerTitle: true,
+
           bottom: TabBar(tabs: [
             Tab(child:  Row(mainAxisSize: MainAxisSize.min, children: [
               Text(_tabs[0], style: TextStyle(

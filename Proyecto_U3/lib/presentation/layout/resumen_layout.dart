@@ -87,7 +87,7 @@ class _ResumenLayoutState extends State<ResumenLayout> {
   @override
   Widget build(BuildContext context) {
     final int idUsuario = Provider.of<UserProvider>(context).idUsuario ?? 1;
-    const bg = Color(0xFFF6F7FB);
+    const bg = Color(0xE9E8FF);
     return RefreshIndicator(
       onRefresh: () async {
         getDatos();

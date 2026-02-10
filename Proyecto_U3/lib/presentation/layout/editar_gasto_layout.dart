@@ -111,8 +111,13 @@ class _EditarGastoLayoutState extends State<EditarGastoLayout> {
       },
       child: SafeArea(child: Scaffold(
         appBar: AppBar(
-          title: const Text("Editar Gasto"),
+          title: const Text("Editar Gasto",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+            ),),
           centerTitle: true,
+          backgroundColor: const Color(0xFFE3F2FD),
         ),
         body: Center(
           child: SingleChildScrollView(
