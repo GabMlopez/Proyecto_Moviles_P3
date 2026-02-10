@@ -21,6 +21,8 @@ final GoRouter appRouter = GoRouter(
 
 
   routes: [
+    GoRoute(path: "/",
+      redirect: (_, __) => "/home",),
     GoRoute(
       path: '/login',
       builder: (context, state) => const SimpleLoginScreen(),
@@ -51,38 +53,53 @@ final GoRouter appRouter = GoRouter(
               builder: (context, state) => MovimientosLayout(),
               routes: [
                 GoRoute(
-                  path: 'ingresos/add',
-                  name: 'agregar ingresos',
+                  path: 'ingresos',
+                  name: 'ver ingresos',
                   builder: (context, state) {
-                  int idUsuario = state.extra as int;
-                  return AddIngresoLayout(idUsuario: idUsuario);
+                    return MovimientosLayout(tab: 0);
                   },
+                  routes: [
+                    GoRoute(
+                      path: 'add',
+                      name: 'agregar ingresos',
+                      builder: (context, state) {
+                        return AddIngresoLayout();
+                      },
+                    ),
+                    GoRoute(
+                      path: 'edit',
+                      name: 'Editar ingresos',
+                      builder: (context, state) {
+                        Ingreso ingreso = state.extra as Ingreso;
+                        return EditarIngresoLayout(datosIngreso: ingreso);
+                      },
+                    )
+                  ]
                 ),
                 GoRoute(
-                  path: 'ingresos/edit',
-                  name: 'Editar ingresos',
+                  path: 'gastos',
+                  name: 'Agregar Gastos',
                   builder: (context, state) {
-                  Ingreso ingreso = state.extra as Ingreso;
-                  return EditarIngresoLayout(datosIngreso: ingreso);
+                  return MovimientosLayout(tab: 1);
                   },
+                  routes: [
+                    GoRoute(
+                      path: 'add',
+                      name: 'agregar Gastos',
+                      builder: (context, state) {
+                        return AddGastoLayout();
+                      },
+                    ),
+                    GoRoute(
+                      path: 'edit',
+                      name: 'Editar Gastos',
+                      builder: (context, state) {
+                        Gasto gasto = state.extra as Gasto;
+                        return EditarGastoLayout(datosGasto: gasto);
+                      },
+                    )
+                  ]
                 ),
-                GoRoute(
-                  path: 'gastos/add',
-                  name: 'agregar gaSTOS',
-                  builder: (context, state) {
-                  int idUsuario = state.extra as int;
-                  return AddGastoLayout(idUsuario: idUsuario);
-                  },
-                ),
-                GoRoute(
-                  path: 'gastos/edit',
-                  name: 'Editar Gastos',
-                  builder: (context, state) {
-                  Gasto gasto = state.extra as Gasto;
-                  return EditarGastoLayout(datosGasto: gasto);
-                  },
-                ),
-
               ]
         )]),
         //Cambiar cuando las paginas esten listas

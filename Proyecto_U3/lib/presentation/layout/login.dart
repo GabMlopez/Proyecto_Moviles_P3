@@ -59,7 +59,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
           if (mounted) {
             context.read<UserProvider>().setAuthData(token, userData);
             _showSnackBar("¡Bienvenido via Facebook, ${userData['nombre_apellido']}!");
-
+            context.go("/home");
 
           }
         }
@@ -241,7 +241,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
             final id = context.read<UserProvider>().idUsuario;
             _showSnackBar("¡Bienvenido! Tu ID es: $id");
-
+            context.go("/home");
           }
 
       } else {

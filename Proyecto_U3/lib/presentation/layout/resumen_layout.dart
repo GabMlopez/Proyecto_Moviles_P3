@@ -67,8 +67,8 @@ class _ResumenLayoutState extends State<ResumenLayout> {
 
 
     //Recibe los totales
-    gastosTotales=data_gastos["total"];
-    ingresosTotales=data_ingresos["total"];
+    gastosTotales=(data_gastos["total"] as num).toDouble();
+    ingresosTotales=(data_ingresos["total"] as num).toDouble();
 
 
     setState(() {
@@ -93,28 +93,33 @@ class _ResumenLayoutState extends State<ResumenLayout> {
   Widget build(BuildContext context) {
     final int idUsuario = Provider.of<UserProvider>(context).idUsuario ?? 1;
     const bg = Color(0xFFF6F7FB);
-    return Scaffold(
-      backgroundColor: bg,
-      body: SafeArea(
-        child: (_isLoading) ? Center(child: CircularProgressIndicator()) :
-        CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(child: HeaderResumen()),
-            SliverToBoxAdapter(child: SizedBox(height: 14)),
-            SliverToBoxAdapter(child: BalanceCard(
-              ingresosTotales: ingresosTotales,
-              gastosTotales: gastosTotales,
-            )),
-            SliverToBoxAdapter(child: SizedBox(height: 14)),
-            SliverToBoxAdapter(child: TrendCard(
-              data_gastos: gastos_semanales,
-              data_ingresos: ingresos_semanales,
-            )),
-            SliverToBoxAdapter(child: SizedBox(height: 14)),
-            SliverToBoxAdapter(child: SizedBox(height: 14)),
-            SliverToBoxAdapter(child: LastMovementsCard()),
-            SliverToBoxAdapter(child: SizedBox(height: 18)),
-          ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        getDatos();
+      },
+      child: Scaffold(
+        backgroundColor: bg,
+        body: SafeArea(
+          child: (_isLoading) ? Center(child: CircularProgressIndicator()) :
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: HeaderResumen()),
+              SliverToBoxAdapter(child: SizedBox(height: 14)),
+              SliverToBoxAdapter(child: BalanceCard(
+                ingresosTotales: ingresosTotales,
+                gastosTotales: gastosTotales,
+              )),
+              SliverToBoxAdapter(child: SizedBox(height: 14)),
+              SliverToBoxAdapter(child: TrendCard(
+                data_gastos: gastos_semanales,
+                data_ingresos: ingresos_semanales,
+              )),
+              SliverToBoxAdapter(child: SizedBox(height: 14)),
+              SliverToBoxAdapter(child: SizedBox(height: 14)),
+              SliverToBoxAdapter(child: LastMovementsCard()),
+              SliverToBoxAdapter(child: SizedBox(height: 18)),
+            ],
+          ),
         ),
       ),
     );
