@@ -45,7 +45,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
       if (result.status == LoginStatus.success) {
 
-        final String accessToken = result.accessToken!.token;
+        final String accessToken = result.accessToken!.tokenString;
 
         final authRepo = getIt<AuthRepository>();
         final response = await authRepo.loginWithFacebook(accessToken);
