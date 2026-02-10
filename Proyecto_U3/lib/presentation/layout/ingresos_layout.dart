@@ -90,7 +90,7 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   List<DataRow> crearFilas(List<Ingreso> data)
   {
     return data.map((Ingreso ingreso)=>ingresoDataRow(ingreso,
-            () => context.go('/tests/edit', extra: ingreso),
+            () => context.go('/movimientos/ingresos/edit', extra: ingreso),
             () {
           _eliminarIngreso(ingreso.idingreso);
         }
@@ -113,7 +113,7 @@ class _IngresosLayoutState extends State<IngresosLayout> {
               children: [
                 ElevatedButton(
                     onPressed: (){
-                      context.go('/tests/add', extra: idUsuario);
+                      context.go('/movimientos/ingresos/add', extra: idUsuario);
                     }, child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

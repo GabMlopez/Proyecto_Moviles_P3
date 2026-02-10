@@ -33,7 +33,7 @@ class TrendCard extends StatelessWidget {
     List<String> etiquetas = [];
     for(int i=0; i<7; i++)
       {
-        etiquetas.add("${ingresos[i]["dia"].substring(9, 10)}-${ingresos[i]["dia"].substring(5, 7)}");
+        etiquetas.add("${ingresos[i]["dia"].substring(8, 10)}-${ingresos[i]["dia"].substring(5, 7)}");
       }
     return etiquetas;
   }
@@ -44,9 +44,9 @@ class TrendCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
          Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            'Tendencia (7 días)',
+            'Tendencia (Últimos 7 días)',
             style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
           ),
         ),
@@ -64,9 +64,14 @@ class TrendCard extends StatelessWidget {
               ),
               SizedBox(height: 12),
               Container(height: 150, alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(horizontal: 18),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
                   child: LineChart(
                   LineChartData(
+                    lineTouchData: LineTouchData(
+                      enabled: true,
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (data) => Colors.grey[200]!,
+                    )),
                     gridData: FlGridData(show: false), // Limpia el fondo
                     titlesData: FlTitlesData(
                       leftTitles: const AxisTitles(
@@ -87,7 +92,7 @@ class TrendCard extends StatelessWidget {
                           reservedSize: 30,
                           getTitlesWidget: (value, meta) {
                             List<String> days = _crearEtiquetas();
-                            return Container(width: 30, margin: EdgeInsets.only(top: 5), child: Text(days[value.toInt()], style: TextStyle(fontSize: 12,
+                            return Container(width: 30, margin: EdgeInsets.only(top: 5), child: Text(days[value.toInt()], style: TextStyle(fontSize: 10,
                             fontWeight: FontWeight.bold),));
                           },
                         ),

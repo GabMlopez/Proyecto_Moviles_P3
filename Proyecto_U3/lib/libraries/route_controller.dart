@@ -21,6 +21,8 @@ final GoRouter appRouter = GoRouter(
 
 
   routes: [
+    GoRoute(path: "/",
+      redirect: (_, __) => "/home",),
     GoRoute(
       path: '/login',
       builder: (context, state) => const SimpleLoginScreen(),
@@ -51,12 +53,22 @@ final GoRouter appRouter = GoRouter(
               builder: (context, state) => MovimientosLayout(),
               routes: [
                 GoRoute(
-                  path: 'ingresos/add',
-                  name: 'agregar ingresos',
+                  path: 'ingresos',
+                  name: 'ver ingresos',
                   builder: (context, state) {
-                  int idUsuario = state.extra as int;
-                  return AddIngresoLayout(idUsuario: idUsuario);
+                    int idUsuario = state.extra as int;
+                    return MovimientosLayout(tab: 0);
                   },
+                  routes: [
+                    GoRoute(
+                      path: 'ingresos/add',
+                      name: 'agregar ingresos',
+                      builder: (context, state) {
+                        int idUsuario = state.extra as int;
+                        return AddIngresoLayout(idUsuario: idUsuario);
+                      },
+                    )
+                  ]
                 ),
                 GoRoute(
                   path: 'ingresos/edit',

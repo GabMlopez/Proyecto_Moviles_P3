@@ -8,7 +8,8 @@ import '../../domain/repository/ingreso_repository.dart';
 import '../molecule/mensaje_snackbar.dart';
 import 'gastos_layout.dart';
 class MovimientosLayout extends StatefulWidget {
-  const MovimientosLayout({super.key});
+  final int? tab;
+  const MovimientosLayout({super.key, this.tab});
 
   @override
   State<MovimientosLayout> createState() => _MovimientosLayoutState();
@@ -104,6 +105,7 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: widget.tab ?? 0,
       length: _tabs.length,
       child: SafeArea(child: Scaffold(
         appBar: AppBar(
