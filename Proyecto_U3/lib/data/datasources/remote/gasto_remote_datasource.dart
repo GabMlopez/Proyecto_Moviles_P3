@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 import '../../../../domain/entities/gasto.dart';
+import '../local/gasto_local_datasource.dart';
 
 class GastoRemoteDatasource {
   final Dio dio;
   final String baseUrl;
+  final GastoLocalDatasource _gastoLocal = GastoLocalDatasource();
+
 
   GastoRemoteDatasource({required this.dio, required this.baseUrl});
 
@@ -12,6 +15,36 @@ class GastoRemoteDatasource {
       late String url = baseUrl + '/gastos/user/$idUsuario';
       final response = await dio.get(
         url,
+      );
+      if (response.statusCode == 200) {
+        final gastoResponse = GastoResponse.fromJson(
+          response.data as Map<String, dynamic>,
+        );
+        return gastoResponse.gastos;
+      } else {
+        throw Exception('Error del servidor: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+
+      if (e.response != null) {
+        print('Respuesta servidor: ${e.response?.statusCode} - ${e.response?.data}');
+        return await _gastoLocal.getAllGastos(idUsuario);
+      }
+      return await _gastoLocal.getAllGastos(idUsuario);
+    } catch (e) {
+      print('Error inesperado: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Gasto>> getGastosForBackup(int idUsuario) async {
+    try {
+      late String url = baseUrl + '/gastos/user/$idUsuario?limite=100';
+      final response = await dio.get(
+        url,
+        data: {
+          "limite":100
+        }
       );
       if (response.statusCode == 200) {
         final gastoResponse = GastoResponse.fromJson(
@@ -50,7 +83,7 @@ class GastoRemoteDatasource {
         throw Exception('Error al obtener gasto: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      throw Exception('Error de red: ${e.message}');
+      return await _gastoLocal.getGastoById(idGasto);
     }
   }
 
@@ -126,7 +159,7 @@ class GastoRemoteDatasource {
         throw Exception('Error al crear gasto');
       }
     } on DioException catch (e) {
-      throw Exception('Error al crear: ${e.response?.data ?? e.message}');
+      await _gastoLocal.addGasto(gasto);
     }
   }
 
@@ -142,7 +175,7 @@ class GastoRemoteDatasource {
         throw Exception('Error al actualizar gasto');
       }
     } on DioException catch (e) {
-      throw Exception('Error al actualizar: ${e.response?.data ?? e.message}');
+      await _gastoLocal.updateGasto(gasto);
     }
   }
 
@@ -157,7 +190,7 @@ class GastoRemoteDatasource {
         throw Exception('Error al eliminar gasto');
       }
     } on DioException catch (e) {
-      throw Exception('Error al eliminar: ${e.response?.data ?? e.message}');
+      await _gastoLocal.deleteGasto(idGasto);
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proyecto_u3/presentation/molecule/mensaje_snackbar.dart';
+import '../../presentation/molecule/mensaje_snackbar.dart';
 
 import '../../domain/entities/gasto.dart';
 import '../../domain/repository/gasto_repository.dart';

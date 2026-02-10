@@ -1,4 +1,4 @@
-name: proyecto_u3
+name: Finences
 description: "Manejo de Ingresos y Egresos"
 publish_to: 'none'
 version: 0.1.0
@@ -16,7 +16,6 @@ dependencies:
   google_sign_in: ^6.2.1
   flutter_dotenv: ^6.0.0
   provider: ^6.1.5+1
-  flutter_facebook_auth: ^6.0.0
 
 dev_dependencies:
   flutter_test:

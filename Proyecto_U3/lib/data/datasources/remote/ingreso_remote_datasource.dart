@@ -1,15 +1,44 @@
 import 'package:dio/dio.dart';
 import '../../../../domain/entities/ingreso.dart';
+import '../local/ingreso_local_datasource.dart';
 
 class IngresoRemoteDataSource {
   final Dio dio;
   final String baseUrl;
+  final IngresoLocalDatasource _ingresoLocal = IngresoLocalDatasource();
+
+
 
   IngresoRemoteDataSource({required this.dio, required this.baseUrl});
 
   Future<List<Ingreso>> getAllIngresos(int idUsuario) async {
     try {
       late String url = baseUrl + '/ingresos/user/$idUsuario';
+      final response = await dio.get(
+        url,
+      );
+      if (response.statusCode == 200) {
+        final ingresoResponse = IngresoResponse.fromJson(
+          response.data as Map<String, dynamic>,
+        );
+        return ingresoResponse.ingresos;
+      } else {
+        throw Exception('Error del servidor: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print('Respuesta servidor: ${e.response?.statusCode} - ${e.response?.data}');
+      }
+      return await _ingresoLocal.getAllIngresos(idUsuario);
+    } catch (e) {
+      print('Error inesperado: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Ingreso>> getIngresosForBackup(int idUsuario) async {
+    try {
+      late String url = baseUrl + '/ingresos/user/$idUsuario?limite=100';
       final response = await dio.get(
         url,
       );
@@ -127,7 +156,7 @@ class IngresoRemoteDataSource {
         throw Exception('Error al crear ingreso');
       }
     } on DioException catch (e) {
-      throw Exception('Error al crear: ${e.response?.data ?? e.message}');
+      await _ingresoLocal.addIngreso(ingreso);
     }
   }
 
@@ -143,7 +172,7 @@ class IngresoRemoteDataSource {
         throw Exception('Error al actualizar ingreso');
       }
     } on DioException catch (e) {
-      throw Exception('Error al actualizar: ${e.response?.data ?? e.message}');
+      await _ingresoLocal.updateIngreso(ingreso);
     }
   }
 
@@ -158,7 +187,7 @@ class IngresoRemoteDataSource {
         throw Exception('Error al eliminar ingreso');
       }
     } on DioException catch (e) {
-      throw Exception('Error al eliminar: ${e.response?.data ?? e.message}');
+      await _ingresoLocal.deleteIngreso(idIngreso);
     }
   }
 }

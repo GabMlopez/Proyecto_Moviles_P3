@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:proyecto_u3/presentation/global_manager/user_provider.dart';
+import '../../presentation/global_manager/user_provider.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../libraries/dio_controller.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -204,6 +205,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
         _passwordControllerGoogle.clear();
         _googleSignIn.signOut();
+        context.go("/home");
       }
     } catch (error) {
       debugPrint("Error: $error");
@@ -234,14 +236,11 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
           final String token = response['token'];
           final Map<String, dynamic> userData = response['user'];
 
-
           if (mounted) {
             context.read<UserProvider>().setAuthData(token, userData);
 
             final id = context.read<UserProvider>().idUsuario;
             _showSnackBar("¡Bienvenido! Tu ID es: $id");
-
-            //Navegación
 
           }
 
