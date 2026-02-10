@@ -13,6 +13,7 @@ class GastoLocalDatasource {
       final data = await db.query(table,
           where: "idusuario = ?", whereArgs: [idUsuario]);
       await db.close();
+      print(data);
       return data.map((e) => Gasto.fromJson(e)).toList();
     }
     catch (e) {
@@ -87,7 +88,7 @@ class GastoLocalDatasource {
             "estado": gasto.estado,
             "valor": gasto.valor,
             "medio_de_pago": gasto.medioDePago,
-            "fuente_beneficiario": gasto.acreedorCobrador,
+            "acreedor_cobrador": gasto.acreedorCobrador,
           },
           conflictAlgorithm: ConflictAlgorithm.replace
       );
@@ -109,7 +110,7 @@ class GastoLocalDatasource {
             "estado": gasto.estado,
             "valor": gasto.valor,
             "medio_de_pago": gasto.medioDePago,
-            "fuente_beneficiario": gasto.acreedorCobrador
+            "acreedor_cobrador": gasto.acreedorCobrador
           }, where: "idgasto = ?", whereArgs: [gasto.idGasto]
       );
       print("Gasto actualizado");

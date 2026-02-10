@@ -23,11 +23,17 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
           title: Text("Movimientos"),
           centerTitle: true,
           bottom: TabBar(tabs: [
-            Tab(text: _tabs[0], icon: Row(mainAxisSize: MainAxisSize.min, children: [
+            Tab(child:  Row(mainAxisSize: MainAxisSize.min, children: [
+              Text(_tabs[0], style: TextStyle(
+                fontWeight: FontWeight.bold
+              ),),
               Icon(Icons.attach_money),
               Icon(Icons.keyboard_double_arrow_up_rounded)
             ],),),
-            Tab(text: _tabs[1], icon: Row(mainAxisSize: MainAxisSize.min, children:[
+            Tab(child: Row(mainAxisSize: MainAxisSize.min, children:[
+              Text(_tabs[1],style: TextStyle(
+                fontWeight: FontWeight.bold
+            ),),
               Icon(Icons.attach_money),
               Icon(Icons.keyboard_double_arrow_down_rounded)
             ]),),

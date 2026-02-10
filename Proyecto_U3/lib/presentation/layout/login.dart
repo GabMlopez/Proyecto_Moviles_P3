@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:Finences/data/datasources/local/usuario_local_datasource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,7 @@ import '../../presentation/global_manager/user_provider.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../libraries/dio_controller.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import '../../libraries/backup_controller.dart';
 
 class SimpleLoginScreen extends StatefulWidget {
   const SimpleLoginScreen({super.key});
@@ -17,6 +19,7 @@ class SimpleLoginScreen extends StatefulWidget {
 }
 
 class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
+  final BackupController _backupController=BackupController();
   bool _isLoading = false;
   late final GoogleSignIn _googleSignIn;
   GoogleSignInAccount? _user;
@@ -58,7 +61,9 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
           // Guardar en el Provider
           if (mounted) {
             context.read<UserProvider>().setAuthData(token, userData);
+
             _showSnackBar("¡Bienvenido via Facebook, ${userData['nombre_apellido']}!");
+            await _backupController.backup(userData["idusuario"]);
             context.go("/home");
 
           }
@@ -200,6 +205,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
 
           context.read<UserProvider>().setAuthData(token, userData);
           final id = context.read<UserProvider>().idUsuario;
+          await _backupController.backup(id!);
           _showSnackBar("Login con Google exitoso. Bienvenido ${data['user']['nombre_apellido']}");
         }
 
@@ -240,6 +246,7 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
             context.read<UserProvider>().setAuthData(token, userData);
 
             final id = context.read<UserProvider>().idUsuario;
+            await _backupController.backup(id!);
             _showSnackBar("¡Bienvenido! Tu ID es: $id");
             context.go("/home");
           }
@@ -248,11 +255,55 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
         _showSnackBar(response['message'] ?? "Credenciales incorrectas");
       }
     } catch (error) {
-      debugPrint("Error en Login: $error");
-      _showSnackBar("Usuario o contraseña incorrectos");
+      await _localSignIn();
     }finally{
       _setLoading(false);
     }
+  }
+
+  Future<void> _localSignIn() async{
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      _showSnackBar("Por favor, completa todos los campos");
+      _setLoading(false);
+      return;
+    }
+    _setLoading(true);
+    try {
+      final authRepo = UsuarioLocalDatasource();
+      if(await authRepo.obtenerUsuario()=={})
+      {
+        _showSnackBar("No hay usuario registrado");
+        _setLoading(false);
+        return;
+      }else{
+        final response = await authRepo.loginNormal(email, password);
+
+        if (response) {
+          final Map<String, dynamic> userData = await authRepo.obtenerUsuario();
+
+          if (mounted) {
+            context.read<UserProvider>().setAuthData("", userData);
+
+            final id = context.read<UserProvider>().idUsuario;
+            _showSnackBar("¡Bienvenido! Tu ID es: $id");
+            context.go("/home");
+          }
+
+        } else {
+          _showSnackBar( "Credenciales incorrectas");
+        }
+      }
+    } catch (error) {
+      debugPrint("Error en Login: $error");
+      _showSnackBar("Usuario o contraseña incorrectos");
+
+    }finally{
+      _setLoading(false);
+    }
+
   }
 
   void _showSnackBar(String msg) {
