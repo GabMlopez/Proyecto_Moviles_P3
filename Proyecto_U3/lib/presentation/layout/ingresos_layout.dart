@@ -21,13 +21,44 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   List<Ingreso> ingresos = [];
   final columnas = ["Fecha", "Motivo", "Origen", "Método de Pago", "Valor", "Estado", "Acciones"];
   final _repository = GetIt.I<IngresoRepository>();
+  late Future<List<Ingreso>> _listaIngresos;
+  int? usuarioId;
 
-
+  @override
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    if(idUsuario!=Provider.of<UserProvider>(context).idUsuario){
+      idUsuario=Provider.of<UserProvider>(context).idUsuario!;
+    }
+    _listaIngresos = _repository.getAllIngresos(idUsuario);
+  }
 
   /* Esta función muestra un mensaje de confirmación primero
   * Si acepta, elimina el ingreso y muestra un mensaje de éxito
    */
-  Future<void> _eliminarIngreso(int idI) async {
+
+  Future<void> _eliminarIngreso(int idI)async{
+
+    try{
+      await _repository.deleteIngreso(idI);
+      setState(() {
+        _listaIngresos = _repository.getAllIngresos(idUsuario);
+      });
+      mostrarMensaje(
+          mensaje: 'Ingreso eliminado correctamente',
+          tipo: 'info',
+          context: context
+      );
+    }catch(e){
+      mostrarMensaje(
+          mensaje: 'Error al eliminar el ingreso',
+          tipo: 'error',
+          context: context
+      );
+    }
+  }
+
+  Future<void> _confirmarEliminacion(int idI) async {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) =>
@@ -35,16 +66,11 @@ class _IngresosLayoutState extends State<IngresosLayout> {
             title: const Text('¿Eliminar?'),
             content: Text('¿Realmente quieres eliminar el ingreso ID $idI?'),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false),
+              TextButton(onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Cancelar')),
               TextButton(onPressed: () {
-                Navigator.pop(context, true);
-                _repository.deleteIngreso(idI);
-                mostrarMensaje(
-                    mensaje: 'Ingreso eliminado correctamente',
-                    tipo: 'info',
-                    context: context
-                );
+                _eliminarIngreso(idI);
+                Navigator.of(context).pop();
               },
                   child: const Text(
                       'Eliminar', style: TextStyle(color: Colors.red))),
@@ -83,8 +109,7 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   //Lo hace en base a las columnas definidas al inicio
   List<DataColumn> crearColumnas(List<String> columnas)
   {
-    List<DataColumn> columnasTabla = columnas.map((String columna)
-    =>DataColumn(label: Text(columna))).toList();
+    List<DataColumn> columnasTabla = columnas.map((String columna)=>DataColumn(label: Text(columna))).toList();
     return columnasTabla;
   }
 
@@ -93,9 +118,14 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   List<DataRow> crearFilas(List<Ingreso> data)
   {
     return data.map((Ingreso ingreso)=>ingresoDataRow(ingreso,
-            () => context.go('/movimientos/ingresos/edit', extra: ingreso),
+            ()async {
+            await context.push('/movimientos/ingresos/edit', extra: ingreso);
+            setState(() {
+              _listaIngresos = _repository.getAllIngresos(idUsuario);
+            });
+            },
             () {
-          _eliminarIngreso(ingreso.idingreso);
+          _confirmarEliminacion(ingreso.idingreso);
         }
     )).toList();
   }
@@ -106,66 +136,76 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   @override
   Widget build(BuildContext context) {
     final int idUsuario = Provider.of<UserProvider>(context).idUsuario ?? 1;
-    return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.all(10),
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          _listaIngresos = _repository.getAllIngresos(idUsuario);
+        });
+      },
+      child: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(10),
+          child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ElevatedButton(
+                      onPressed: ()async{
+                        await context.push('/movimientos/ingresos/add');
 
-        child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ElevatedButton(
-                    onPressed: (){
-                      context.go('/movimientos/ingresos/add', extra: idUsuario);
-                    }, child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.add),
-                    Text("Agregar Ingreso")
-                  ],
-                )),
-                SizedBox(
-                  height: 20,
-                ),
-                FutureBuilder(future: _repository.getAllIngresos(idUsuario),
-                    builder: (context, snapshot){
-                      if (snapshot.hasError) {
-                        return Center(child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Error: ${snapshot.error}'),
-                            ElevatedButton(onPressed: () {
-                              setState(() {});
-                            }, child: Text('Reintentar'))
-                          ],
-                        ));
+                        setState(() {
+                          _listaIngresos = _repository.getAllIngresos(idUsuario);
+                        });
+                      }, child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add),
+                      Text("Agregar Ingreso")
+                    ],
+                  )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  FutureBuilder(future: _listaIngresos,
+                      builder: (context, snapshot){
+                        if (snapshot.hasError) {
+                          return Center(child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Error: ${snapshot.error}'),
+                              ElevatedButton(onPressed: () {
+                                setState(() {});
+                              }, child: Text('Reintentar'))
+                            ],
+                          ));
+                        }
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(
+                              child: Text('Aún no ha registrado ningún ingreso'));
+                        }
+                        if(snapshot.hasData) {
+                          ingresos = snapshot.data!;
+                          return Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            margin: EdgeInsets.all(10),
+                            child: IngresosDataTable(ingresos),
+                          );
+                        }
+                        else{
+                          return Center(child: Text('Aún no ha registrado ningún ingreso'));
+                        }
                       }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
-                            child: Text('Aún no ha registrado ningún ingreso'));
-                      }
-                      if(snapshot.hasData) {
-                        ingresos = snapshot.data!;
-                        return Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                          ),
-                          margin: EdgeInsets.all(10),
-                          child: IngresosDataTable(ingresos),
-                        );
-                      }
-                      else{
-                        return Center(child: Text('Aún no ha registrado ningún ingreso'));
-                      }
-                    }
-        
-                ),
-              ],
-            ),
+
+                  ),
+                ],
+              ),
+        ),
       ),
     );
   }}

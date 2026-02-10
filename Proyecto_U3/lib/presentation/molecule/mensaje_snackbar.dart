@@ -5,6 +5,7 @@ void mostrarMensaje({required String mensaje, required String tipo, required Bui
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(mensaje),
     duration: Duration(seconds: 3),
+    behavior: SnackBarBehavior.floating,
     backgroundColor: (tipo == "error") ? Colors.red : (tipo == "info") ? Colors.blue : Colors.green
   ));
 }
