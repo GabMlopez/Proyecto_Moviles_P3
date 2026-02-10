@@ -37,12 +37,8 @@ class BottomNav extends StatelessWidget {
           label: 'Movimientos',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.auto_awesome_rounded),
-          label: 'IA Insights',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.temple_buddhist_sharp),
-          label: 'test',
+          icon: Icon(Icons.account_box_outlined),
+          label: 'Cuenta',
         ),
       ],
     );

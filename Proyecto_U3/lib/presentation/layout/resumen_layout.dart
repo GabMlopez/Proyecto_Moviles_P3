@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import '../../domain/entities/gasto.dart';
 import '../../domain/entities/ingreso.dart';
 import '../../domain/repository/gasto_repository.dart';
 import '../../domain/repository/ingreso_repository.dart';
 
+import '../global_manager/user_provider.dart';
 import '../organism/header_resumen.dart';
 import '../organism/balance_card.dart';
 import '../organism/trend_card.dart';
@@ -19,6 +21,7 @@ class ResumenLayout extends StatefulWidget {
 }
 
 class _ResumenLayoutState extends State<ResumenLayout> {
+  int? idUsuario;
   final _ingresoRepository = GetIt.I<IngresoRepository>();
   final _gastoRepository = GetIt.I<GastoRepository>();
   Map<String, dynamic> ingresos_semanales={};
@@ -39,10 +42,10 @@ class _ResumenLayoutState extends State<ResumenLayout> {
       _isLoading = true;
     });
     final resultados = await Future.wait([
-      _ingresoRepository.getIngresosMensuales(1),
-      _gastoRepository.getGastosMensuales(1),
-      _ingresoRepository.getIngresosSemanales(1),
-      _gastoRepository.getGastosSemanales(1),
+      _ingresoRepository.getIngresosMensuales(idUsuario!),
+      _gastoRepository.getGastosMensuales(idUsuario!),
+      _ingresoRepository.getIngresosSemanales(idUsuario!),
+      _gastoRepository.getGastosSemanales(idUsuario!),
     ]);
 
     //Guarda los resultados semanales
@@ -81,12 +84,14 @@ class _ResumenLayoutState extends State<ResumenLayout> {
   @override
   void initState() {
     super.initState();
+    idUsuario=Provider.of<UserProvider>(context, listen: false).idUsuario ?? 1;
     getDatos();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    final int idUsuario = Provider.of<UserProvider>(context).idUsuario ?? 1;
     const bg = Color(0xFFF6F7FB);
     return Scaffold(
       backgroundColor: bg,

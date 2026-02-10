@@ -89,15 +89,6 @@ final GoRouter appRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/tests1',
-              name: 'tests1',
-              builder: (context, state) => const TestLayout(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
               path: '/tests2',
               name: 'tests2',
               builder: (context, state) => const SimpleLoginScreen(),
