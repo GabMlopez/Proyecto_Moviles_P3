@@ -5,6 +5,7 @@ abstract class AuthRemoteDataSource {
   Future<Map<String, dynamic>> loginWithGoogle(String idToken, String contrasenia);
   Future<Map<String, dynamic>> loginNormal(String correo, String password);
   Future<Map<String, dynamic>?> buscarUsuarioPorCorreo(String correo);
+  Future<Map<String, dynamic>> loginWithFacebook(String accessToken);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -61,6 +62,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return null;
     } catch (e) {
       return null;
+    }
+  }
+
+  @override
+  @override
+  Future<Map<String, dynamic>> loginWithFacebook(String accessToken) async {
+    try {
+      final response = await dio.post(
+        '/auth/facebook',
+        data: {'accessToken': accessToken},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      // ESTA LÍNEA ES CLAVE: Imprime el error real del backend en tu consola
+      print("DETALLE DEL FALLO EN BACKEND: ${e.response?.data}");
+      throw Exception(e.response?.data['error'] ?? 'Error en login social');
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:proyecto_u3/presentation/global_manager/user_provider.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../libraries/dio_controller.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class SimpleLoginScreen extends StatefulWidget {
   const SimpleLoginScreen({super.key});
@@ -31,6 +32,45 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
     setState(() {
       _isLoading = value;
     });
+  }
+
+  Future<void> _handleFacebookSignIn() async {
+    _setLoading(true);
+    try {
+      // Iniciar sesión con los permisos configurados en Meta
+      final LoginResult result = await FacebookAuth.instance.login(
+        permissions: ['public_profile', 'email'],
+      );
+
+      if (result.status == LoginStatus.success) {
+
+        final String accessToken = result.accessToken!.token;
+
+        final authRepo = getIt<AuthRepository>();
+        final response = await authRepo.loginWithFacebook(accessToken);
+
+        if (response['success'] == true) {
+          final data = response['data'];
+          final String token = data['token'];
+          final Map<String, dynamic> userData = data['user'];
+
+          // Guardar en el Provider
+          if (mounted) {
+            context.read<UserProvider>().setAuthData(token, userData);
+            _showSnackBar("¡Bienvenido via Facebook, ${userData['nombre_apellido']}!");
+
+
+          }
+        }
+      } else {
+        _showSnackBar("Inicio de sesión cancelado");
+      }
+    } catch (error) {
+      debugPrint("Error Facebook: $error");
+      _showSnackBar("Error al conectar con Facebook");
+    } finally {
+      _setLoading(false);
+    }
   }
 
   void _setupGoogleSignIn() {
@@ -285,6 +325,25 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
                     ? const CircularProgressIndicator()
                     : const Text("Continuar con Google", style: TextStyle(color: Colors.black87)),
                 onPressed: _isLoading ? null : _handleSignIn,
+              ),
+            ),
+            const SizedBox(height: 15), // Espaciado entre botones
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton.icon(
+                icon: _isLoading
+                    ? const SizedBox.shrink()
+                    : const Icon(Icons.facebook, color: Colors.white),
+                label: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text("Continuar con Facebook",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1877F2), // Azul oficial
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                onPressed: _isLoading ? null : _handleFacebookSignIn,
               ),
             ),
           ],

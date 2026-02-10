@@ -20,4 +20,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Map<String, dynamic>?> buscarUsuarioPorCorreo(String correo){
     return remoteDataSource.buscarUsuarioPorCorreo(correo);
   }
+
+  @override
+  Future<Map<String, dynamic>> loginWithFacebook(String accessToken) {
+    return remoteDataSource.loginWithFacebook(accessToken);
+
+  }
 }
