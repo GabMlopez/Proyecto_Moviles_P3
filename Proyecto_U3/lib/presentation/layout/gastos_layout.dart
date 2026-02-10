@@ -23,10 +23,30 @@ class _GastosLayoutState extends State<GastosLayout> {
   final _repository = GetIt.I<GastoRepository>();
 
 
+  Future<void> _eliminarGasto(int idI)async {
+    try{
+      await _repository.deleteGasto(idI);
+      setState(() {
+
+      });
+      mostrarMensaje(
+          mensaje: 'Gasto eliminado correctamente',
+          tipo: 'info',
+          context: context
+      );
+    }
+    catch(e){
+      mostrarMensaje(
+          mensaje: 'Error al eliminar el gasto',
+          tipo: 'error',
+          context: context
+      );
+    }
+  }
   /* Esta función muestra un mensaje de confirmación primero
   * Si acepta, elimina el gasto y muestra un mensaje de éxito
    */
-  Future<void> _eliminarGasto(int idI) async {
+  Future<void> _confirmarEliminacion(int idI) async {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) =>
@@ -34,18 +54,11 @@ class _GastosLayoutState extends State<GastosLayout> {
             title: const Text('¿Eliminar?'),
             content: Text('¿Realmente quieres eliminar este gasto?'),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false),
+              TextButton(onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Cancelar')),
               TextButton(onPressed: () {
-                  Navigator.pop(context, true);
-                  _repository.deleteGasto(idI);
-                  mostrarMensaje(
-                      mensaje: 'Gasto eliminado correctamente',
-                      tipo: 'info',
-                      context: context
-                  );
-                  setState(() {
-                  });
+                  _eliminarGasto(idI);
+                  Navigator.of(context).pop();
                 },
                   child: const Text(
                       'Eliminar', style: TextStyle(color: Colors.red))),
@@ -94,10 +107,7 @@ class _GastosLayoutState extends State<GastosLayout> {
     return data.map((Gasto gasto)=>GastoDataRow(gasto,
         () => context.go('/movimientos/gastos/edit', extra: gasto),
         () {
-          _eliminarGasto(gasto.idGasto);
-          setState(() {
-
-          });
+          _confirmarEliminacion(gasto.idGasto);
         }
     )).toList();
   }

@@ -320,9 +320,9 @@ class _EditarIngresoLayoutState extends State<EditarIngresoLayout> {
     }
 
     try{
-      _repository.updateIngreso(ingresoActualizado);
+      await _repository.updateIngreso(ingresoActualizado);
       mostrarMensaje(mensaje: "Ingreso actualizado correctamente", tipo: "info", context: context);
-      context.go("/movimientos/ingresos");
+      context.pop(true);
     }catch(e) 
     {
       mostrarMensaje(mensaje: "Error al crear el ingreso", tipo: "error", context: context);

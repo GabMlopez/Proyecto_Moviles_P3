@@ -275,7 +275,7 @@ class _AddIngresoLayoutState extends State<AddIngresoLayout> {
 
     try{
       final int idUsuario = Provider.of<UserProvider>(context, listen: false).idUsuario!;
-      _repository.addIngreso(Ingreso(
+      await _repository.addIngreso(Ingreso(
           idingreso: 0,
           idusuario: idUsuario,
           fecha: selectedDate!,
@@ -286,7 +286,7 @@ class _AddIngresoLayoutState extends State<AddIngresoLayout> {
           estado: _estadoController.text
       ));
       mostrarMensaje(mensaje: "Ingreso creado correctamente", tipo: "success", context: context);
-      context.go("/movimientos/ingresos");
+      context.pop(true);
     }catch(e)
     {
       mostrarMensaje(mensaje: "Error al crear el ingreso", tipo: "error", context: context);

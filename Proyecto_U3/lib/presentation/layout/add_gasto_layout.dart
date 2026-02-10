@@ -276,7 +276,7 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
 
     try{
       final int idUsuario = Provider.of<UserProvider>(context, listen: false).idUsuario!;
-      _repository.addGasto(Gasto(
+      await _repository.addGasto(Gasto(
           idGasto: 0,
           idUsuario: idUsuario,
           fecha: selectedDate!,

@@ -320,7 +320,7 @@ class _EditarGastoLayoutState extends State<EditarGastoLayout> {
     }
 
     try{
-      _repository.updateGasto(gastoActualizado);
+      await _repository.updateGasto(gastoActualizado);
       mostrarMensaje(mensaje: "Gasto actualizado correctamente", tipo: "info", context: context);
       context.go("/movimientos/gastos");
     }catch(e) 
