@@ -39,7 +39,7 @@ class AuthService {
 
       if (result.status == LoginStatus.success) {
         // 2. Obtener el Token
-        final String token = result.accessToken!.token;
+        final String token = result.accessToken!.tokenString;
 
         // 3. Enviar a tu API Node.js
         final response = await authRemoteDataSource.loginWithFacebook(token);
