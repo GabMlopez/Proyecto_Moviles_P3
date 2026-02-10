@@ -1,13 +1,14 @@
+import 'package:Finences/presentation/global_manager/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../presentation/molecule/mensaje_snackbar.dart';
 
 import '../../domain/entities/gasto.dart';
 import '../../domain/repository/gasto_repository.dart';
 class AddGastoLayout extends StatefulWidget {
-  final int idUsuario;
-  AddGastoLayout({super.key, required this.idUsuario});
+  AddGastoLayout({super.key});
 
   @override
   State<AddGastoLayout> createState() => _AddGastoLayoutState();
@@ -77,165 +78,173 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      appBar: AppBar(
-        title: const Text("Agregar Gasto"),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                height: 10,
-              ),
+    return PopScope(
+      onPopInvoked: (bool didPop) {
+        if (didPop) {
+          return;
+        }
+        context.go("/movimientos/gastos");
+      },
+      child: SafeArea(child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Agregar Gasto"),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(width: 250,
+                    height: 50,
+                    child: TextField(
+                        controller: _descripcionController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Descripción del Gasto",
+                            hintText: "Ej: Salario Mes de Noviembre"
+                        ))),
+                SizedBox(height: 20),
+                SizedBox(width: 150,
+                    height: 50,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                        controller: _valorController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Valor",
+                        ))),
+                SizedBox(height: 20),
+                SizedBox(
+                    width: 250,
+                    height: 50,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: TextField(
+                              readOnly: true,
+                              controller: _fechaController,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Fecha del gasto")
+                          ),
+                        ),
+                        IconButton(icon: Icon(Icons.calendar_month), onPressed: (){
+                          _selectDate();
+                        },)
+                      ],
+                    )
+                ),
+                SizedBox(height: 20),
               SizedBox(width: 250,
                   height: 50,
                   child: TextField(
-                      controller: _descripcionController,
+                      controller: _acreedorCobradorController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: "Descripción del Gasto",
-                          hintText: "Ej: Salario Mes de Noviembre"
+                          labelText: "Destinatario o acreedor/cobrador",
+                          hintText: "Ej: Empresa de Seguros"
                       ))),
-              SizedBox(height: 20),
-              SizedBox(width: 150,
-                  height: 50,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                      controller: _valorController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Valor",
-                      ))),
-              SizedBox(height: 20),
-              SizedBox(
-                  width: 250,
-                  height: 50,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                            readOnly: true,
-                            controller: _fechaController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Fecha del gasto")
+                SizedBox(height: 20),
+                SizedBox(height: 20, child: Text("Medio de Pago:", style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),)),
+                Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: 50,
+                    child: DropdownButton(
+                        underline: Container(
+                          height: 0,
                         ),
-                      ),
-                      IconButton(icon: Icon(Icons.calendar_month), onPressed: (){
-                        _selectDate();
-                      },)
-                    ],
-                  )
-              ),
-              SizedBox(height: 20),
-            SizedBox(width: 250,
-                height: 50,
-                child: TextField(
-                    controller: _acreedorCobradorController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Destinatario o acreedor/cobrador",
-                        hintText: "Ej: Empresa de Seguros"
-                    ))),
-              SizedBox(height: 20),
-              SizedBox(height: 20, child: Text("Medio de Pago:", style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),)),
-              Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 50,
-                  child: DropdownButton(
-                      underline: Container(
-                        height: 0,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      hint: Text("Seleccione un medio de pago"),
-                      items: [
-                        DropdownMenuItem(value: "", child: Text("-")),
-                        DropdownMenuItem(value: "Efectivo", child: Text("Efectivo")),
-                        DropdownMenuItem(value: "Tarjeta de crédito", child: Text("Tarjeta de crédito")),
-                        DropdownMenuItem(value: "Tarjeta de débito", child: Text("Tarjeta de débito")),
-                        DropdownMenuItem(value: "Cheque", child: Text("Cheque")),
-                        DropdownMenuItem(value: "Transferencia Bancaria", child: Text("Transferencia")),
-                        DropdownMenuItem(value: "Otro", child: Text("Otro")),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        hint: Text("Seleccione un medio de pago"),
+                        items: [
+                          DropdownMenuItem(value: "", child: Text("-")),
+                          DropdownMenuItem(value: "Efectivo", child: Text("Efectivo")),
+                          DropdownMenuItem(value: "Tarjeta de crédito", child: Text("Tarjeta de crédito")),
+                          DropdownMenuItem(value: "Tarjeta de débito", child: Text("Tarjeta de débito")),
+                          DropdownMenuItem(value: "Cheque", child: Text("Cheque")),
+                          DropdownMenuItem(value: "Transferencia Bancaria", child: Text("Transferencia")),
+                          DropdownMenuItem(value: "Otro", child: Text("Otro")),
+                        ],
+                        value: _medioDePagoController.text,
+                        onChanged: (valor)
+                    {
+                      setState(() {
+                        _medioDePagoController.text = valor!;
+                      });
+                    })),
+                SizedBox(height: 20),
+                SizedBox(height: 20, child: Text("Estado:", style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),)),
+                Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: 50,
+                    child: DropdownButton(
+                        underline: Container(
+                          height: 0,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        hint: Text("Estado: "),
+                        items: [
+                          DropdownMenuItem(value: "", child: Text("-")),
+                          DropdownMenuItem(value: "pendiente", child: Text("pendiente")),
+                          DropdownMenuItem(value: "confirmado", child: Text("confirmado")),
+                          DropdownMenuItem(value: "atrasado", child: Text("atrasado")),
+                        ],
+                        value: _estadoController.text,
+                        onChanged: (valor)
+                        {
+                          setState(() {
+                            _estadoController.text = valor!;
+                          });
+                        })),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(_errorMsg,
+                  style: TextStyle(color: Colors.red),
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                    width: 250,
+                    height: 40,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      spacing: 15,
+                      children: [
+                        OutlinedButton(onPressed: (){
+                          context.pop();
+                        }, child: Text("Cancelar")),
+                        OutlinedButton(onPressed: (){
+                          crearGasto();
+                        }, child: Text("Crear")),
                       ],
-                      value: _medioDePagoController.text,
-                      onChanged: (valor)
-                  {
-                    setState(() {
-                      _medioDePagoController.text = valor!;
-                    });
-                  })),
-              SizedBox(height: 20),
-              SizedBox(height: 20, child: Text("Estado:", style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),)),
-              Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 50,
-                  child: DropdownButton(
-                      underline: Container(
-                        height: 0,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      hint: Text("Estado: "),
-                      items: [
-                        DropdownMenuItem(value: "", child: Text("-")),
-                        DropdownMenuItem(value: "pendiente", child: Text("pendiente")),
-                        DropdownMenuItem(value: "confirmado", child: Text("confirmado")),
-                        DropdownMenuItem(value: "atrasado", child: Text("atrasado")),
-                      ],
-                      value: _estadoController.text,
-                      onChanged: (valor)
-                      {
-                        setState(() {
-                          _estadoController.text = valor!;
-                        });
-                      })),
-              SizedBox(
-                height: 10,
-              ),
-              Text(_errorMsg,
-                style: TextStyle(color: Colors.red),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                  width: 250,
-                  height: 40,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    spacing: 15,
-                    children: [
-                      OutlinedButton(onPressed: (){
-                        context.pop();
-                      }, child: Text("Cancelar")),
-                      OutlinedButton(onPressed: (){
-                        crearGasto();
-                      }, child: Text("Crear")),
-                    ],
-                  )
-              )
-            ],
+                    )
+                )
+              ],
+            ),
           ),
+        )
         ),
-      )
       ),
     );
   }
@@ -266,9 +275,10 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
     }
 
     try{
+      final int idUsuario = Provider.of<UserProvider>(context, listen: false).idUsuario!;
       _repository.addGasto(Gasto(
           idGasto: 0,
-          idUsuario: widget.idUsuario,
+          idUsuario: idUsuario,
           fecha: selectedDate!,
           valor: _valorController.text,
           medioDePago: _medioDePagoController.text,
@@ -277,7 +287,7 @@ class _AddGastoLayoutState extends State<AddGastoLayout> {
           estado: _estadoController.text
       ));
       mostrarMensaje(mensaje: "Gasto creado correctamente", tipo: "success", context: context);
-      context.pop();
+      context.go("/movimientos/gastos");
     }catch(e)
     {
       mostrarMensaje(mensaje: "Error al crear el gasto", tipo: "error", context: context);

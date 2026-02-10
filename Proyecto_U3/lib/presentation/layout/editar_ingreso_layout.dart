@@ -102,164 +102,172 @@ class _EditarIngresoLayoutState extends State<EditarIngresoLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      appBar: AppBar(
-        title: const Text("Editar Ingreso"),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                height: 10,
-              ),
+    return PopScope(
+      onPopInvoked: (bool didPop) {
+        if (didPop) {
+          return;
+        }
+        context.go("/movimientos/ingresos");
+      },
+      child: SafeArea(child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Editar Ingreso"),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(width: 250,
+                    height: 50,
+                    child: TextField(
+                        controller: _descripcionController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Descripción del Ingreso",
+                            hintText: "Ej: Salario Mes de Noviembre"
+                        ))),
+                SizedBox(height: 20),
+                SizedBox(width: 150,
+                    height: 50,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                        controller: _valorController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Valor",
+                        ))),
+                SizedBox(height: 20),
+                SizedBox(
+                    width: 250,
+                    height: 50,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: TextField(
+                              readOnly: true,
+                              controller: _fechaController,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Fecha del ingreso")
+                          ),
+                        ),
+                        IconButton(icon: Icon(Icons.calendar_month), onPressed: (){
+                          _selectDate();
+                        },)
+                      ],
+                    )
+                ),
+                SizedBox(height: 20),
               SizedBox(width: 250,
                   height: 50,
                   child: TextField(
-                      controller: _descripcionController,
+                      controller: _fuenteBeneficiarioController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: "Descripción del Ingreso",
-                          hintText: "Ej: Salario Mes de Noviembre"
+                          labelText: "Fuente del ingreso",
+                          hintText: "Ej: Empresa de Seguros"
                       ))),
-              SizedBox(height: 20),
-              SizedBox(width: 150,
-                  height: 50,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                      controller: _valorController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Valor",
-                      ))),
-              SizedBox(height: 20),
-              SizedBox(
-                  width: 250,
-                  height: 50,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                            readOnly: true,
-                            controller: _fechaController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Fecha del ingreso")
+                SizedBox(height: 20),
+                SizedBox(height: 20, child: Text("Medio de Pago:", style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),)),
+                Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: 50,
+                    child: DropdownButton(
+                        underline: Container(
+                          height: 0,
                         ),
-                      ),
-                      IconButton(icon: Icon(Icons.calendar_month), onPressed: (){
-                        _selectDate();
-                      },)
-                    ],
-                  )
-              ),
-              SizedBox(height: 20),
-            SizedBox(width: 250,
-                height: 50,
-                child: TextField(
-                    controller: _fuenteBeneficiarioController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Fuente del ingreso",
-                        hintText: "Ej: Empresa de Seguros"
-                    ))),
-              SizedBox(height: 20),
-              SizedBox(height: 20, child: Text("Medio de Pago:", style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),)),
-              Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 50,
-                  child: DropdownButton(
-                      underline: Container(
-                        height: 0,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      hint: Text("Seleccione un medio de pago"),
-                      items: [
-                        DropdownMenuItem(value: "", child: Text("-")),
-                        DropdownMenuItem(value: "Efectivo", child: Text("Efectivo")),
-                        DropdownMenuItem(value: "Tarjeta de crédito", child: Text("Tarjeta de crédito")),
-                        DropdownMenuItem(value: "Tarjeta de débito", child: Text("Tarjeta de débito")),
-                        DropdownMenuItem(value: "Cheque", child: Text("Cheque")),
-                        DropdownMenuItem(value: "Transferencia Bancaria", child: Text("Transferencia")),
-                        DropdownMenuItem(value: "Otro", child: Text("Otro")),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        hint: Text("Seleccione un medio de pago"),
+                        items: [
+                          DropdownMenuItem(value: "", child: Text("-")),
+                          DropdownMenuItem(value: "Efectivo", child: Text("Efectivo")),
+                          DropdownMenuItem(value: "Tarjeta de crédito", child: Text("Tarjeta de crédito")),
+                          DropdownMenuItem(value: "Tarjeta de débito", child: Text("Tarjeta de débito")),
+                          DropdownMenuItem(value: "Cheque", child: Text("Cheque")),
+                          DropdownMenuItem(value: "Transferencia Bancaria", child: Text("Transferencia")),
+                          DropdownMenuItem(value: "Otro", child: Text("Otro")),
+                        ],
+                        value: _medioDePagoController.text,
+                        onChanged: (valor)
+                    {
+                      setState(() {
+                        _medioDePagoController.text = valor!;
+                      });
+                    })),
+                SizedBox(height: 20),
+                SizedBox(height: 20, child: Text("Estado:", style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),)),
+                Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: 50,
+                    child: DropdownButton(
+                        underline: Container(
+                          height: 0,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        hint: Text("Estado: "),
+                        items: [
+                          DropdownMenuItem(value: "", child: Text("-")),
+                          DropdownMenuItem(value: "pendiente", child: Text("pendiente")),
+                          DropdownMenuItem(value: "confirmado", child: Text("confirmado")),
+                        ],
+                        value: _estadoController.text,
+                        onChanged: (valor)
+                        {
+                          setState(() {
+                            _estadoController.text = valor!;
+                          });
+                        })),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(_errorMsg,
+                  style: TextStyle(color: Colors.red),
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                    width: 250,
+                    height: 40,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      spacing: 15,
+                      children: [
+                        OutlinedButton(onPressed: (){
+                          context.pop();
+                        }, child: Text("Cancelar")),
+                        OutlinedButton(onPressed: (){
+                          crearIngreso();
+                        }, child: Text("Actualizar")),
                       ],
-                      value: _medioDePagoController.text,
-                      onChanged: (valor)
-                  {
-                    setState(() {
-                      _medioDePagoController.text = valor!;
-                    });
-                  })),
-              SizedBox(height: 20),
-              SizedBox(height: 20, child: Text("Estado:", style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),)),
-              Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 50,
-                  child: DropdownButton(
-                      underline: Container(
-                        height: 0,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      hint: Text("Estado: "),
-                      items: [
-                        DropdownMenuItem(value: "", child: Text("-")),
-                        DropdownMenuItem(value: "pendiente", child: Text("pendiente")),
-                        DropdownMenuItem(value: "confirmado", child: Text("confirmado")),
-                      ],
-                      value: _estadoController.text,
-                      onChanged: (valor)
-                      {
-                        setState(() {
-                          _estadoController.text = valor!;
-                        });
-                      })),
-              SizedBox(
-                height: 10,
-              ),
-              Text(_errorMsg,
-                style: TextStyle(color: Colors.red),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                  width: 250,
-                  height: 40,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    spacing: 15,
-                    children: [
-                      OutlinedButton(onPressed: (){
-                        context.pop();
-                      }, child: Text("Cancelar")),
-                      OutlinedButton(onPressed: (){
-                        crearIngreso();
-                      }, child: Text("Actualizar")),
-                    ],
-                  )
-              )
-            ],
+                    )
+                )
+              ],
+            ),
           ),
+        )
         ),
-      )
       ),
     );
   }
@@ -314,7 +322,7 @@ class _EditarIngresoLayoutState extends State<EditarIngresoLayout> {
     try{
       _repository.updateIngreso(ingresoActualizado);
       mostrarMensaje(mensaje: "Ingreso actualizado correctamente", tipo: "info", context: context);
-      context.pop();
+      context.go("/movimientos/ingresos");
     }catch(e) 
     {
       mostrarMensaje(mensaje: "Error al crear el ingreso", tipo: "error", context: context);
