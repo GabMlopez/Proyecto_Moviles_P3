@@ -238,8 +238,8 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
           if (mounted) {
             context.read<UserProvider>().setAuthData(token, userData);
 
-            final id = context.read<UserProvider>().idUsuario;
-            _showSnackBar("¡Bienvenido! Tu ID es: $id");
+            final nombreApellido = userData['nombre_apellido'];
+            _showSnackBar("¡Bienvenido!: $nombreApellido");
             context.go("/home");
           }
 

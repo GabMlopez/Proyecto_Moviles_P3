@@ -101,17 +101,6 @@ final GoRouter appRouter = GoRouter(
                 ),
               ]
         )]),
-        //Cambiar cuando las paginas esten listas
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/tests2',
-              name: 'tests2',
-              builder: (context, state) => const SimpleLoginScreen(),
-            ),
-          ],
-        ),
-
       ],
     ),
 
