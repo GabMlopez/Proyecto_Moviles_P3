@@ -13,6 +13,7 @@ class IngresoLocalDatasource {
       final data = await db.query(table,
           where: "idusuario = ?", whereArgs: [idUsuario]);
       await db.close();
+      print(data);
       return data.map((e) => Ingreso.fromJson(e)).toList();
     }
     catch (e) {

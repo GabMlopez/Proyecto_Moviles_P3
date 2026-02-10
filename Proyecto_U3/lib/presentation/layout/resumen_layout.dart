@@ -76,11 +76,6 @@ class _ResumenLayoutState extends State<ResumenLayout> {
     });
   }
 
-  void receiveData()
-  {
-    getDatos();
-  }
-
   @override
   void initState() {
     super.initState();
