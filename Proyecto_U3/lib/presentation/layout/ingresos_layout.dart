@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proyecto_u3/presentation/molecule/ingreso_data_row.dart';
+import 'package:provider/provider.dart';
+import '../../presentation/molecule/ingreso_data_row.dart';
 import '../../domain/entities/ingreso.dart';
 import '../../domain/repository/ingreso_repository.dart';
+import '../global_manager/user_provider.dart';
 import '../molecule/mensaje_snackbar.dart';
 class IngresosLayout extends StatefulWidget {
   const IngresosLayout({super.key});
@@ -21,10 +23,11 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   final _repository = GetIt.I<IngresoRepository>();
 
 
+
   /* Esta función muestra un mensaje de confirmación primero
   * Si acepta, elimina el ingreso y muestra un mensaje de éxito
    */
-  Future<void> _eliminarIngreso(int idI, int idU) async {
+  Future<void> _eliminarIngreso(int idI) async {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) =>
@@ -55,7 +58,6 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   * Devuelve un widget de tipo DataTable
   * */
   Widget IngresosDataTable(List<Ingreso> data){
-
     return SingleChildScrollView(
       //El widget es Scrolleable tanto vertical como horizontalmente
       scrollDirection: Axis.horizontal,
@@ -90,7 +92,7 @@ class _IngresosLayoutState extends State<IngresosLayout> {
     return data.map((Ingreso ingreso)=>ingresoDataRow(ingreso,
             () => context.go('/tests/edit', extra: ingreso),
             () {
-          _eliminarIngreso(ingreso.idingreso, ingreso.idusuario);
+          _eliminarIngreso(ingreso.idingreso);
         }
     )).toList();
   }
@@ -100,6 +102,7 @@ class _IngresosLayoutState extends State<IngresosLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final int idUsuario = Provider.of<UserProvider>(context).idUsuario ?? 1;
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.all(10),
@@ -121,7 +124,7 @@ class _IngresosLayoutState extends State<IngresosLayout> {
                 SizedBox(
                   height: 20,
                 ),
-                FutureBuilder(future: _repository.getAllIngresos(1),
+                FutureBuilder(future: _repository.getAllIngresos(idUsuario),
                     builder: (context, snapshot){
                       if (snapshot.hasError) {
                         return Center(child: Column(

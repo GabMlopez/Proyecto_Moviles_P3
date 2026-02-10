@@ -44,10 +44,6 @@ class _ResumenLayoutState extends State<ResumenLayout> {
       _ingresoRepository.getIngresosSemanales(1),
       _gastoRepository.getGastosSemanales(1),
     ]);
-    print(resultados[0]);
-    print(resultados[1]);
-    print(resultados[2]);
-    print(resultados[3]);
 
     //Guarda los resultados semanales
     ingresos_semanales = resultados[2];

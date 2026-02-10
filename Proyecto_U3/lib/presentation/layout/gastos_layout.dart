@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:proyecto_u3/presentation/molecule/gasto_data_row.dart';
 import '../../domain/entities/gasto.dart';
 import '../../domain/repository/gasto_repository.dart';
+import '../global_manager/user_provider.dart';
 import '../molecule/mensaje_snackbar.dart';
 class GastosLayout extends StatefulWidget {
   const GastosLayout({super.key});
@@ -105,6 +107,7 @@ class _GastosLayoutState extends State<GastosLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final int idUsuario = Provider.of<UserProvider>(context).idUsuario ?? 1;
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.all(10),

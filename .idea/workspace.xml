@@ -5,7 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4c43a1c-66c8-428d-9ddf-d6e4adc7d04f" name="Changes" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/local/gasto_local_datasource.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/local/ingreso_local_datasource.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/backup_controller.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/sqlite_database.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/gasto_remote_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/gasto_remote_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/ingreso_remote_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/data/datasources/remote/ingreso_remote_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/libraries/route_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/gastos_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/gastos_layout.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/ingresos_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/ingresos_layout.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/resumen_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/lib/presentation/layout/resumen_layout.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Proyecto_U3/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Proyecto_U3/pubspec.yaml" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +56,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< Updated upstream
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Flutter.FlutterProject.executor&quot;: &quot;Run&quot;,
@@ -56,15 +75,36 @@
     &quot;last_opened_file_path&quot;: &quot;C:/Users/marpa/AndroidStudioProjects/Proyecto_Moviles_P3/Proyecto_U3/android/app/src/main/res&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.android.studio.ml.bot.mainConfigurable&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+=======
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Flutter.FlutterProject.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/marpa/AndroidStudioProjects/Proyecto_Moviles_P3/Proyecto_U3/lib/data/datasources/local",
+    "settings.editor.selected.configurable": "com.android.studio.ml.bot.mainConfigurable",
+    "show.migrate.to.gradle.popup": "false"
+>>>>>>> Stashed changes
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\data\datasources\local" />
       <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\android\app\src\main\res" />
       <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\presentation\layout" />
       <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\presentation\molecule" />
       <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\domain\use_cases\gasto" />
-      <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3\lib\data\datasources\remote" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\marpa\AndroidStudioProjects\Proyecto_Moviles_P3\Proyecto_U3" />
