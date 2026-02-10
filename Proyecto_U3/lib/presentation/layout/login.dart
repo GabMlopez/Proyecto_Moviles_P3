@@ -208,7 +208,6 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
         context.go("/home");
       }
     } catch (error) {
-      debugPrint("Error: $error");
       _showSnackBar("Error al iniciar sesión");
 
     }finally{

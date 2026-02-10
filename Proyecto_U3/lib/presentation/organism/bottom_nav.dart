@@ -21,6 +21,7 @@ class BottomNav extends StatelessWidget {
     final currentIndex = navigationShell.currentIndex;
 
     return BottomNavigationBar(
+      backgroundColor: const Color(0xFFE3F2FD),
       currentIndex: currentIndex,
       onTap: _goBranch,
       type: BottomNavigationBarType.fixed,

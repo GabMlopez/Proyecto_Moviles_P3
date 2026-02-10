@@ -70,6 +70,8 @@ class _IngresosLayoutState extends State<IngresosLayout> {
             dataRowMaxHeight: 70,
             sortAscending: true,
             sortColumnIndex: 0,
+            headingRowColor: WidgetStateProperty.all(const Color(0xFFE3F2FD)), // El azul tenue
+            headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
             columns: crearColumnas(columnas),
             rows: crearFilas(data)
         ),
@@ -81,7 +83,8 @@ class _IngresosLayoutState extends State<IngresosLayout> {
   //Lo hace en base a las columnas definidas al inicio
   List<DataColumn> crearColumnas(List<String> columnas)
   {
-    List<DataColumn> columnasTabla = columnas.map((String columna)=>DataColumn(label: Text(columna))).toList();
+    List<DataColumn> columnasTabla = columnas.map((String columna)
+    =>DataColumn(label: Text(columna))).toList();
     return columnasTabla;
   }
 
@@ -106,6 +109,7 @@ class _IngresosLayoutState extends State<IngresosLayout> {
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.all(10),
+
         child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,

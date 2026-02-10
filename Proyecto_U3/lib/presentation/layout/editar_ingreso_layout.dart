@@ -111,8 +111,13 @@ class _EditarIngresoLayoutState extends State<EditarIngresoLayout> {
       },
       child: SafeArea(child: Scaffold(
         appBar: AppBar(
-          title: const Text("Editar Ingreso"),
+          title: const Text("Editar Ingreso",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+            ),),
           centerTitle: true,
+          backgroundColor: const Color(0xFFE3F2FD),
         ),
         body: Center(
           child: SingleChildScrollView(

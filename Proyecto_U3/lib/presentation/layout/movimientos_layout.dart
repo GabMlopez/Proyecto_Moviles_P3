@@ -16,7 +16,7 @@ class MovimientosLayout extends StatefulWidget {
 }
 
 class _MovimientosLayoutState extends State<MovimientosLayout> {
-  int idUsuario=1;//Placeholder esto se debe quitar luego
+  int idUsuario=1;
   /* Como parámetros están los ingresos, las columnas y el repositorio
   * */
   List<Ingreso> ingresos = [];
@@ -101,7 +101,6 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
 
 
 
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -109,8 +108,13 @@ class _MovimientosLayoutState extends State<MovimientosLayout> {
       length: _tabs.length,
       child: SafeArea(child: Scaffold(
         appBar: AppBar(
-          title: const Text("Movimientos"),
+          title: const Text("Movimientos", style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+          ),),
+          backgroundColor: const Color(0xFFE3F2FD),
           centerTitle: true,
+
           bottom: TabBar(tabs: [
             Tab(text: _tabs[0], icon: Row(mainAxisSize: MainAxisSize.min, children: [
               Icon(Icons.attach_money),
