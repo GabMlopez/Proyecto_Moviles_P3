@@ -63,7 +63,6 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
             context.read<UserProvider>().setAuthData(token, userData);
 
             _showSnackBar("¡Bienvenido via Facebook, ${userData['nombre_apellido']}!");
-            await _backupController.backup(userData["idusuario"]);
             context.go("/home");
 
           }
@@ -247,6 +246,8 @@ class _SimpleLoginScreenState extends State<SimpleLoginScreen> {
             final id = context.read<UserProvider>().idUsuario;
             await _backupController.backup(id!);
             _showSnackBar("¡Bienvenido! Tu ID es: $id");
+            final nombreApellido = userData['nombre_apellido'];
+            _showSnackBar("¡Bienvenido!: $nombreApellido");
             context.go("/home");
           }
 

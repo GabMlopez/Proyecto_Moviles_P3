@@ -37,10 +37,6 @@ class BottomNav extends StatelessWidget {
           icon: Icon(Icons.receipt_long_rounded),
           label: 'Movimientos',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.account_box_outlined),
-          label: 'Cuenta',
-        ),
       ],
     );
   }
